@@ -53,9 +53,9 @@ body{font-family:'Outfit',sans-serif;color:var(--tx);height:100%;background:var(
 .mode-card .dot{width:8px;height:8px;border-radius:50%;background:#e0d5c0}
 .mode-card .dot.on{background:var(--h)}
 
-.rules-box{background:#fef9ee;border:1px solid #ede5d0;border-radius:12px;padding:14px;margin-top:16px;width:100%;max-width:400px}
-.rules-box h3{font-family:'Fraunces',serif;font-size:14px;margin-bottom:6px}
-.rules-box li{font-size:12px;color:var(--txl);line-height:1.6;margin-left:16px}
+.rules-box{background:#fef9ee;border:1px solid #ede5d0;border-radius:12px;padding:16px;margin-top:16px;width:100%;max-width:400px}
+.rules-box h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:8px}
+.rules-box li{font-size:14px;color:var(--txl);line-height:1.7;margin-left:16px}
 
 /* ===== GAME ===== */
 #game{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;z-index:40;overflow:hidden}
@@ -84,17 +84,23 @@ body{font-family:'Outfit',sans-serif;color:var(--tx);height:100%;background:var(
 #inp .cur{display:inline-block;width:2px;height:26px;background:var(--h);animation:blink 1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
 
-#hc{display:flex;flex-direction:column;align-items:center;gap:5px;margin:6px 0;user-select:none;flex-shrink:0}
+#hc-frame{position:relative;flex-shrink:0;margin:8px 0;display:flex;align-items:center;justify-content:center}
+#hc-frame::before{content:'';position:absolute;width:240px;height:260px;background:radial-gradient(ellipse at center,rgba(245,166,35,.08) 0%,rgba(245,166,35,.03) 50%,transparent 70%);pointer-events:none;z-index:0}
+#hc-frame .frame-hex{position:absolute;pointer-events:none;z-index:0}
+#hc-frame .frame-hex svg{opacity:.06;filter:blur(0.5px)}
+
+#hc{display:flex;flex-direction:column;align-items:center;gap:5px;user-select:none;flex-shrink:0;position:relative;z-index:1;padding:18px;background:radial-gradient(ellipse at center,rgba(254,243,199,.6) 0%,rgba(254,243,199,.2) 60%,transparent 80%);border-radius:50%}
 .hr{display:flex;gap:5px}
 .hx{width:62px;height:66px;position:relative;cursor:pointer;transition:transform .08s}
 .hx:active{transform:scale(.9)}
-.hx svg{width:100%;height:100%}
+.hx svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(180,150,80,.15))}
 .hb{fill:#f5edd5;stroke:#e5c76b;stroke-width:1.5;transition:fill .12s}
 .hx:hover .hb{fill:#ece2c8}
 .hx.ct .hb{fill:var(--h);stroke:var(--hd);stroke-width:2}
 .hx.ct:hover .hb{fill:var(--hd)}
+.hx.ct svg{filter:drop-shadow(0 2px 8px rgba(245,166,35,.4))}
 .hl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--tx);pointer-events:none;text-transform:uppercase}
-.hx.ct .hl{color:#fff}
+.hx.ct .hl{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.15)}
 /* hex press animation */
 .hx.press{animation:hexPop .2s ease}
 @keyframes hexPop{0%{transform:scale(.85)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
@@ -236,11 +242,24 @@ body{font-family:'Outfit',sans-serif;color:var(--tx);height:100%;background:var(
     <div id="timer" style="font-size:20px;font-family:'Fraunces',serif;font-weight:900;color:#dc2626;display:none;margin:2px 0"></div>
     <div id="msg">&nbsp;</div>
     <div id="inp"><span class="cur"></span></div>
-    <div id="hc"></div>
+    <div id="hc-frame">
+      <!-- Decorative background hexagons -->
+      <div class="frame-hex" style="top:-18px;left:-14px"><svg width="50" height="55" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="top:-18px;right:-14px"><svg width="45" height="50" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="bottom:-16px;left:-20px"><svg width="40" height="44" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="bottom:-16px;right:-18px"><svg width="48" height="52" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="top:50%;left:-28px;transform:translateY(-50%)"><svg width="36" height="40" viewBox="0 0 100 110"><polygon fill="#e5c76b" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="top:50%;right:-28px;transform:translateY(-50%)"><svg width="36" height="40" viewBox="0 0 100 110"><polygon fill="#e5c76b" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div id="hc"></div>
+    </div>
     <div id="btns">
       <button class="bt" onclick="del()">⌫</button>
       <button class="bt" onclick="shuf()">🔀</button>
       <button class="bt pr" onclick="submit()">Enviar</button>
+    </div>
+    <div style="display:flex;gap:8px;margin:2px 0 4px;flex-shrink:0">
+      <button class="bt" onclick="novasLetras()" style="font-size:12px;padding:6px 14px;opacity:.7">🔄 Novas letras</button>
+      <button class="bt" onclick="desistir()" style="font-size:12px;padding:6px 14px;opacity:.7;color:#dc2626;border-color:#e5c5c5">💡 Solução — Desisto!</button>
     </div>
     <div id="farea">
       <div id="fhdr"><h3>Encontradas: <span id="fc">0</span></h3><span id="ftotal"></span></div>
@@ -254,9 +273,10 @@ body{font-family:'Outfit',sans-serif;color:var(--tx);height:100%;background:var(
   <div class="card">
     <h2 id="cTitle"></h2>
     <div class="stars" id="cStars"></div>
-    <p id="cMsg"></p>
+    <p id="cMsg" style="white-space:pre-line;max-height:180px;overflow-y:auto;font-size:13px;line-height:1.5;text-align:left"></p>
     <div class="btns">
       <button class="bt" onclick="backToMenu()">Menu</button>
+      <button class="bt" onclick="novasLetras();document.getElementById('complete').classList.remove('show')">Novas letras</button>
       <button class="bt pr" onclick="nextPuzzle()">Próximo →</button>
     </div>
   </div>
@@ -496,6 +516,57 @@ function backToMenu() {
   document.getElementById('game').classList.remove('active');
   document.getElementById('complete').classList.remove('show');
   document.getElementById('menu').style.display = 'flex';
+}
+
+function novasLetras() {
+  if (timerInt) clearInterval(timerInt);
+  pi = (pi+1) % PZ[diff].length;
+  loadPuzzle(pi);
+  msg('Novas letras!','ok');
+  if (mode === 'blitz') {
+    timeLeft = 120;
+    updateTimer();
+    timerInt = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 0) { clearInterval(timerInt); endBlitz(); }
+    }, 1000);
+  }
+}
+
+function desistir() {
+  if (timerInt) clearInterval(timerInt);
+  // Separate found vs missed
+  const missed = vw.filter(w => !found.includes(w)).sort((a,b) => a.localeCompare(b,'pt'));
+  const pct = mx>0?(sc/mx*100):0;
+  const stars = pct>=50?3:pct>=25?2:pct>=10?1:0;
+  
+  // Build solution text
+  let txt = `✅ Encontraste ${found.length} de ${vw.length} palavras (${sc} pts)\n\n`;
+  
+  if (found.length > 0) {
+    txt += '🟢 As tuas: ' + found.sort((a,b)=>a.localeCompare(b,'pt')).join(', ') + '\n\n';
+  }
+  
+  txt += `🔴 Faltavam (${missed.length}):\n`;
+  // Group by first letter
+  const groups = {};
+  missed.forEach(w => {
+    const l = w[0].toUpperCase();
+    if (!groups[l]) groups[l] = [];
+    groups[l].push(w);
+  });
+  Object.keys(groups).sort().forEach(l => {
+    txt += l + ': ' + groups[l].join(', ') + '\n';
+  });
+  
+  // Mark pangrams
+  const pgs = vw.filter(w => isPG(w));
+  if (pgs.length > 0) {
+    txt += '\n⭐ Pangramas: ' + pgs.join(', ');
+  }
+  
+  showComplete('💡 Solução', stars, txt);
 }
 
 // ===== KEYBOARD =====
