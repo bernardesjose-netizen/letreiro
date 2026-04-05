@@ -2,462 +2,595 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Delta Língua">
+<meta name="apple-mobile-web-app-title" content="Letreiro">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1a412d">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%232d6a4f'/%3E%3Ctext x='90' y='120' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='90' fill='white'%3EDL%3C/text%3E%3C/svg%3E">
-<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Delta%20Língua%22%2C%22short_name%22%3A%22DL%20Tasks%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%231a412d%22%2C%22theme_color%22%3A%22%231a412d%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520512%2520512'%253E%253Crect%2520width%3D'512'%2520height%3D'512'%2520rx%3D'100'%2520fill%3D'%25232d6a4f'%2F%253E%253Ctext%2520x%3D'256'%2520y%3D'340'%2520text-anchor%3D'middle'%2520font-family%3D'Arial%2Csans-serif'%2520font-weight%3D'800'%2520font-size%3D'250'%2520fill%3D'white'%253EDL%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d6a4f'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='16' fill='white'%3EDL%3C/text%3E%3C/svg%3E">
-<title>Delta Língua - Gestão de Tarefas</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<meta name="theme-color" content="#f59e0b">
+<meta name="description" content="Letreiro — O Caça-Palavras do Favo">
+<link rel="manifest" href="data:application/json,{%22name%22:%22Letreiro%22,%22short_name%22:%22Letreiro%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23fffdf5%22,%22theme_color%22:%22%23f59e0b%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='%23f59e0b'/><text x='256' y='350' text-anchor='middle' font-size='300' font-family='serif' font-weight='bold' fill='white'>L</text><text x='256' y='460' text-anchor='middle' font-size='100' fill='%23fffdf5'>🐝</text></svg>%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22}]}">
+<title>Letreiro 🐝</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f5f7f5;--card:#fff;--text:#1a2e22;--sub:#5f7a68;--brd:#dce5dd;--acc:#2d6a4f;--input:#f1f5f1;--today:#dcfce7;--alt:#f7faf8;--sb-track:#e8ede9;--sb-thumb:#a3bfab;--sb-hover:#a3bfab;--sb-dark-track:rgba(45,106,79,0.12);--sb-dark-thumb:rgba(170,210,180,0.5);--sb-dark-hover:rgba(170,210,180,0.5)}
-/* Scrollbar — sempre visível, sempre clara, NUNCA muda cor */
-*{scrollbar-width:thin}
-@supports not selector(::-webkit-scrollbar){*{scrollbar-color:#a3bfab #e8ede9}}
-::-webkit-scrollbar{width:8px;height:8px}
-::-webkit-scrollbar-track{background:#e8ede9!important;border-radius:100px}
-::-webkit-scrollbar-thumb{background:#a3bfab!important;background-color:#a3bfab!important;border-radius:100px;border:none!important;outline:none!important;box-shadow:none!important}
-::-webkit-scrollbar-thumb:hover{background:#a3bfab!important;background-color:#a3bfab!important;border:none!important;outline:none!important;box-shadow:none!important}
-::-webkit-scrollbar-thumb:active{background:#a3bfab!important;background-color:#a3bfab!important;border:none!important;outline:none!important;box-shadow:none!important}
-::-webkit-scrollbar-thumb:window-inactive{background:#a3bfab!important;background-color:#a3bfab!important;border:none!important}
-::-webkit-scrollbar-corner{background:#e8ede9!important}
-/* Scrollbar dentro da sidebar escura — trilho transparente (mostra fundo escuro), barrinha clara */
-.snv,#snv{scrollbar-width:thin;scrollbar-color:#a3bfab transparent}
-#snv::-webkit-scrollbar{width:8px}
-#snv::-webkit-scrollbar-track{background:transparent!important}
-#snv::-webkit-scrollbar-thumb{background:#a3bfab!important;border:none!important;border-radius:100px}
-#snv::-webkit-scrollbar-thumb:hover{background:#a3bfab!important;border:none!important}
-#snv::-webkit-scrollbar-thumb:active{background:#a3bfab!important;border:none!important}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;font-weight:400}
-#sb{width:282px;min-width:282px;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,#1a412d,#163626,#122d20)}
-#sb.c{width:56px;min-width:56px}
-.sh{padding:18px 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:6px}
-.slogo{background:linear-gradient(135deg,#2d6a4f,#22855e);color:#fff;font-size:15px;font-weight:800;padding:10px 12px;border-radius:12px;min-width:42px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(45,106,79,0.3)}
-.sbr{color:#fff;font-weight:700;font-size:17px}.sbs{color:#5da87a;font-size:11px;margin-top:1px;font-weight:400}
-.snv{flex:1;overflow-y:scroll;padding:0 10px}
-.ssc{font-size:10px;font-weight:600;color:#4d8a66;text-transform:uppercase;letter-spacing:1.2px;padding:18px 14px 6px;margin-top:2px}
-.si{display:flex;align-items:center;gap:12px;padding:10px 14px;margin-bottom:1px;background:0;border:none;border-radius:10px;cursor:pointer;color:#9dc3ab;font-weight:400;font-size:14px;text-align:left;width:100%;transition:all .18s;border-left:3px solid transparent}
-.si:hover{background:rgba(45,106,79,0.15);border-left-color:rgba(16,185,129,0.5);color:#c8e6d4}
-.si.a{background:rgba(45,106,79,0.25);color:#fff;font-weight:600;border-left-color:#10b981;box-shadow:0 2px 8px rgba(16,185,129,0.1)}
-.si .ic{font-size:17px;min-width:22px;text-align:center}
-.si .cn{font-size:11px;background:rgba(45,106,79,0.35);color:#a8d8b8;border-radius:12px;padding:2px 9px;font-weight:600;min-width:20px;text-align:center;margin-left:auto}
-.si.a .cn{background:rgba(16,185,129,0.3);color:#fff}
-.sbt{padding:12px 12px 16px;display:flex;flex-direction:column;gap:6px;border-top:1px solid rgba(45,106,79,0.25)}
-.bt{display:flex;align-items:center;gap:8px;padding:10px 14px;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;justify-content:flex-start;transition:all .15s}
-.bt:hover{transform:translateY(-1px)}
-.bt.p{background:linear-gradient(135deg,#2d6a4f,#22855e);color:#fff;box-shadow:0 2px 8px rgba(45,106,79,0.25)}
-.bt.ai{background:linear-gradient(135deg,#1a8a5a,#059669);color:#fff;font-size:12px;box-shadow:0 2px 8px rgba(5,150,105,0.2)}
-.bt.g{background:rgba(45,106,79,0.12);color:#9dc3ab;border:1px solid rgba(45,106,79,0.25);font-weight:400;font-size:12px;padding:8px 12px}
-.bt.g:hover{background:rgba(45,106,79,0.22);color:#c8e6d4}
-.srw{display:flex;gap:5px}.srw .bt{flex:1;justify-content:center;padding:8px 12px}
-#mn{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#fafcfa}
-/* Header */
-.tb{padding:24px 32px 0;display:flex;flex-direction:column;gap:4px;background:transparent;border:none}
-.tb h2{font-weight:600;font-size:28px;white-space:nowrap;color:var(--text)}
-.tb .dt{font-size:14px;color:var(--sub);font-weight:400;margin-bottom:16px}
-.tb .sp{display:none}
-/* Filtros */
-.fbar{padding:0 32px 12px;display:flex;gap:8px;flex-wrap:nowrap;align-items:center}
-.fbar input,.fbar select{padding:8px 12px;border-radius:100px;border:1px solid var(--brd);background:var(--card);color:var(--text);font-size:12px;outline:none;font-weight:400;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
-.fbar input[type=text]{width:140px;flex-shrink:0}
-.fbar select{min-width:0;max-width:120px}
-.fbar input:focus,.fbar select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(45,106,79,0.1)}
-.fbar label{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub);cursor:pointer;white-space:nowrap;font-weight:400;flex-shrink:0}
-#ct{flex:1;display:flex;overflow:hidden}
-/* Task rows */
-.tr{display:flex;align-items:center;gap:14px;padding:18px 20px;background:var(--card);border-radius:16px;margin-bottom:10px;cursor:pointer;border:1px solid var(--brd);transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.tr.al{background:var(--card)}
-.tr:hover{box-shadow:0 4px 16px rgba(45,106,79,0.08);transform:translateY(-1px)}
-.tr.od{background:#fef2f2;border-color:#fca5a5}
-/* Priority dot */
-.pdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-/* Checkbox */
-.tr input[type=checkbox]{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:2px solid #ccd5ce;background:var(--card);cursor:pointer;flex-shrink:0;position:relative;transition:all .15s}
-.tr input[type=checkbox]:hover{border-color:var(--acc)}
-.tr input[type=checkbox]:checked{background:var(--acc);border-color:var(--acc)}
-.tr input[type=checkbox]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-size:14px;font-weight:600}
-.ti{flex:1;min-width:0}
-.tt{font-weight:500;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#2c3e35}
-.tt.dn{text-decoration:line-through;color:#9ca3af;font-weight:400}
-.tg{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;align-items:center}
-.tg span{font-size:12px;font-weight:400}
-.tag{padding:3px 10px;border-radius:100px;font-weight:500;font-size:12px}
-.pb{height:4px;background:var(--brd);border-radius:3px;margin-top:8px;overflow:hidden;max-width:220px}
-.pb div{height:100%;background:linear-gradient(90deg,#2d6a4f,#10b981);border-radius:3px}
-.pct{font-size:12px;font-weight:500;color:var(--sub);min-width:38px;text-align:right}
-/* Star button */
-.star{background:0;border:none;cursor:pointer;font-size:18px;flex-shrink:0;padding:4px;opacity:0.4;transition:opacity .15s}
-.star:hover,.star.on{opacity:1}
-.ha{display:none;gap:4px;flex-shrink:0}.tr:hover .ha{display:flex}
-.ha button{background:0;border:1px solid var(--brd);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:12px}
-/* Sort bar */
-.sb2{display:flex;align-items:center;gap:8px;padding:0 0 10px;font-size:12px;color:var(--sub);font-weight:400}
-.sb2 button{background:0;border:none;color:var(--sub);cursor:pointer;font-size:11px;padding:4px 10px;border-radius:100px;font-weight:400}
-.sb2 button:hover,.sb2 button.ac{background:var(--acc);color:#fff;font-weight:500}
-.ds{margin-top:16px;border-top:1px solid var(--brd);padding-top:12px}
-.ds button.dt2{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;color:var(--sub);font-size:13px;font-weight:500;border:none;background:0;width:100%}
-#det{width:340px;min-width:340px;background:var(--card);border-left:1px solid var(--brd);padding:20px;overflow-y:scroll;display:none}
-#det.open{display:block}
-.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.dh span{font-weight:600;font-size:15px}
-.dh button{background:0;border:1px solid var(--brd);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:12px;margin-left:4px}
-.dh .del{background:#ef4444;color:#fff;border:none}
-.odb{background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:8px 12px;margin-bottom:12px;color:#dc2626;font-size:12px;font-weight:500}
-.fl{margin-bottom:10px}.fl label{font-size:11px;color:var(--sub);font-weight:500;display:block;margin-bottom:4px}
-.fl input,.fl select,.fl textarea{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--brd);background:var(--input);color:var(--text);font-size:13px;outline:none;font-weight:400}
-.fl textarea{resize:vertical;font-family:inherit}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ac2{position:relative}.ac2 .sg{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--brd);border-radius:8px;z-index:99;max-height:150px;overflow-y:auto;display:none}
-.ac2 .sg div{padding:8px 12px;cursor:pointer;font-size:12px;border-bottom:1px solid var(--brd)}.ac2 .sg div:hover{background:var(--input)}
-.pgb{height:6px;background:var(--brd);border-radius:3px;margin-top:4px;overflow:hidden}.pgb div{height:100%;background:linear-gradient(90deg,#2d6a4f,#10b981);border-radius:3px}
-.kan{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:16px;overflow:scroll;flex:1}
-.kcol{background:var(--input);border-radius:12px;padding:12px;min-height:300px}
-.kcd{background:var(--card);border-radius:12px;padding:14px;margin-bottom:8px;cursor:pointer;border:1px solid var(--brd);border-left:4px solid var(--acc);transition:all .2s}
-.kcd:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,106,79,0.12)}
-.cal{padding:20px;flex:1;overflow-y:scroll}
-.cgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cd{min-height:70px;background:var(--card);border-radius:8px;padding:4px;border:1px solid var(--brd)}.cd.empty{background:0;border:none}.cd.today{background:var(--today)}
-.ct2{font-size:9px;padding:3px 5px;border-radius:4px;margin-bottom:2px;cursor:pointer;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dash{padding:20px;flex:1;overflow-y:scroll}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
-.sc{background:var(--card);border-radius:12px;padding:14px;border:1px solid var(--brd);transition:all .2s;cursor:pointer}
-.sc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(45,106,79,0.12)}
-.db{background:var(--card);border-radius:12px;padding:16px;border:1px solid var(--brd);transition:all .2s}.db:hover{box-shadow:0 4px 16px rgba(45,106,79,0.06)}
-.db h3{font-size:13px;font-weight:600;margin-bottom:10px}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:flex;align-items:center;justify-content:center}
-.mo .mi{background:var(--card);border-radius:16px;padding:24px;width:520px;max-height:80vh;overflow-y:scroll;border:1px solid var(--brd);box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.mo .mi.wide{width:600px}
-.pz{border:2px dashed var(--brd);border-radius:12px;padding:40px;text-align:center;cursor:pointer;outline:none}.pz:focus{border-color:var(--acc)}
-.spin{animation:sp 1s linear infinite}@keyframes sp{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:60px;color:var(--sub)}.empty .big{font-size:48px;margin-bottom:12px}
-.empty button{margin-top:12px;padding:10px 24px;background:var(--acc);color:#fff;border:none;border-radius:100px;cursor:pointer;font-weight:500}
-@media(max-width:768px){
-body{flex-direction:column}#sb{width:100%!important;min-width:100%!important;height:auto;position:fixed;z-index:100;top:0;left:0;right:0;bottom:0}
-#sb.c{position:static;height:0;min-height:0;overflow:hidden}
-#sb.c .snv,#sb.c .sbt,#sb.c .sh{display:none}
-#ct{flex-direction:column!important}#det{width:100%!important;min-width:100%!important;max-height:60vh;border-left:none!important;border-top:1px solid var(--brd)}
-.kan{display:grid!important;grid-template-columns:1fr 1fr!important;overflow-y:auto!important}.kan .kcol{max-width:100%!important;min-width:0!important;min-height:200px}
-.sgrid{grid-template-columns:repeat(2,1fr)!important}
-.g2{grid-template-columns:1fr!important}.fl input,.fl select,.fl textarea{font-size:14px;padding:8px}
-.ha{display:flex!important}.mo .mi,.mo .mi.wide{width:95vw!important;padding:16px}
-.tb{padding:12px 16px 0;flex-direction:row;align-items:center;gap:10px}.tb h2{font-size:20px}
-.fbar{padding:0 16px 10px;flex-wrap:wrap}.fbar input[type=text]{width:100%}
-}
-.bk-ind{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:10px;color:#5da87a;border-top:1px solid rgba(45,106,79,0.15);margin-top:4px}
-.bk-ind .dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.bk-ind.warn .dot{background:#eab308;animation:none}
-.bk-set{padding:4px 14px 8px}
-.bk-set label{display:flex;align-items:center;gap:8px;font-size:11px;color:#9dc3ab;cursor:pointer;margin-bottom:5px}
-.bk-set input[type=checkbox]{accent-color:#10b981}
-.bk-set select{padding:3px 6px;border-radius:6px;border:1px solid rgba(45,106,79,0.3);background:rgba(45,106,79,0.1);color:#c8e6d4;font-size:11px;outline:none}
-.bk-tog{background:0;border:none;color:#5da87a;cursor:pointer;font-size:11px;padding:4px 14px;width:100%;text-align:left}
-.bk-tog:hover{color:#c8e6d4}
-/* Login */
-#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#1a412d,#163626);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-box{background:#fff;border-radius:20px;padding:40px;width:380px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
-.login-box .logo{text-align:center;margin-bottom:24px}
-.login-box .logo div{display:inline-block;background:linear-gradient(135deg,#2d6a4f,#22855e);color:#fff;font-size:24px;font-weight:800;padding:16px 24px;border-radius:16px;box-shadow:0 4px 16px rgba(45,106,79,0.3)}
-.login-box h2{text-align:center;margin-bottom:6px;color:#1a2e22;font-size:20px}
-.login-box .lsub{text-align:center;color:#5f7a68;font-size:13px;margin-bottom:24px}
-.login-box>label{font-size:12px;font-weight:600;color:#5f7a68;display:block;margin-bottom:4px}
-.login-box>input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid #dce5dd;background:#f1f5f1;color:#1a2e22;font-size:14px;outline:none;margin-bottom:14px}
-.login-box>input:focus{border-color:#2d6a4f;box-shadow:0 0 0 3px rgba(45,106,79,0.1)}
-.login-box>button{width:100%;padding:12px;background:linear-gradient(135deg,#2d6a4f,#22855e);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(45,106,79,0.25);transition:all .2s}
-.login-box>button:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(45,106,79,0.35)}
-.login-box .err{color:#ef4444;font-size:12px;text-align:center;margin-top:10px;min-height:18px}
-.login-box .linfo{color:#2d6a4f;font-size:11px;text-align:center;margin-top:12px}
-/* Visibility & user */
-.vis-badge{font-size:10px;padding:2px 8px;border-radius:100px;font-weight:500}
-.vis-team{background:#dcfce722;color:#16a34a;border:1px solid #16a34a44}
-.vis-private{background:#dbeafe22;color:#2563eb;border:1px solid #2563eb44}
-.user-info{padding:8px 14px;display:flex;align-items:center;gap:8px;color:#9dc3ab;font-size:12px;border-top:1px solid rgba(45,106,79,0.25)}
-.user-info .avatar{width:28px;height:28px;border-radius:50%;background:#2d6a4f;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px}
-.user-info button{background:rgba(239,68,68,0.15);color:#fca5a5;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;margin-left:auto;font-weight:600}
-.user-info button:hover{background:rgba(239,68,68,0.3)}
-.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
-.sync-on{background:#22c55e}.sync-off{background:#ef4444}
-/* Kanban melhorado */
-.kan{display:flex;gap:12px;padding:16px;overflow-x:auto;flex:1;align-items:flex-start}
-.kcol{background:var(--input);border-radius:14px;padding:12px;min-height:300px;min-width:200px;flex:1;max-width:280px}
-.kcd .kcd-acts{position:absolute;top:6px;right:6px;display:none;gap:2px}
-.kcd:hover .kcd-acts{display:flex}
-.kcd .kcd-acts button{background:var(--input);border:1px solid var(--brd);border-radius:4px;padding:2px 5px;cursor:pointer;font-size:10px}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Outfit:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--h:#f59e0b;--hd:#d97706;--hl:#ffeaa7;--bg:#fffdf5;--tx:#3a2e1a;--txl:#8a7a5a;--ok:#16a34a;--err:#dc2626;--r:12px}
+html{height:100%;overflow:hidden}
+body{font-family:'Outfit',sans-serif;color:var(--tx);height:100%;background:var(--bg);overflow:hidden;position:fixed;width:100%;touch-action:manipulation}
+
+/* ===== SPLASH ===== */
+#splash{position:fixed;inset:0;background:linear-gradient(135deg,#fef3c7,#fde68a,#fbbf24);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity .6s,transform .6s}
+#splash.gone{opacity:0;transform:scale(1.1);pointer-events:none;display:none}
+#splash h1{font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:#92400e;margin-bottom:4px}
+#splash .bee{font-size:64px;animation:float 2s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+#splash p{color:#92400e;font-size:15px;margin-top:8px;font-weight:300;opacity:.8}
+.splash-hex{position:absolute;opacity:.08}
+.splash-hex:nth-child(1){top:10%;left:8%;font-size:120px;animation:spin 20s linear infinite}
+.splash-hex:nth-child(2){bottom:15%;right:5%;font-size:80px;animation:spin 15s linear infinite reverse}
+.splash-hex:nth-child(3){top:40%;right:10%;font-size:60px;animation:spin 25s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+
+/* ===== MENU ===== */
+#menu{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;z-index:50;overflow-y:auto;padding:0 20px 40px}
+#menu.gone{display:none}
+#menu header{text-align:center;padding:28px 0 12px}
+#menu h1{font-family:'Fraunces',serif;font-size:36px;font-weight:900}
+#menu h1 span{color:var(--h)}
+#menu .bee2{font-size:40px;display:block;margin:4px 0 8px}
+#menu p.tagline{font-size:14px;color:var(--txl);font-weight:300;max-width:280px;line-height:1.5}
+
+.mode-section{width:100%;max-width:400px;margin-top:20px}
+.mode-section h2{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.mode-card{background:#fff;border:2px solid #ede5d0;border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.mode-card:hover{border-color:var(--h);transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,166,35,.15)}
+.mode-card:active{transform:scale(.98)}
+.mode-card h3{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.mode-card p{font-size:13px;color:var(--txl);line-height:1.4}
+.mode-card .badge{position:absolute;top:12px;right:12px;background:var(--hl);color:#92400e;font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px}
+.mode-card .diff{display:flex;gap:4px;margin-top:8px}
+.mode-card .dot{width:8px;height:8px;border-radius:50%;background:#e0d5c0}
+.mode-card .dot.on{background:var(--h)}
+
+.rules-box{background:#fef9ee;border:1px solid #ede5d0;border-radius:12px;padding:16px;margin-top:16px;width:100%;max-width:400px}
+.rules-box h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:8px}
+.rules-box li{font-size:14px;color:var(--txl);line-height:1.7;margin-left:16px}
+
+/* ===== GAME ===== */
+#game{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;z-index:40;overflow:hidden}
+#game.active{display:flex}
+#gtop{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 4px;flex-shrink:0}
+#gtop .back{background:none;border:none;font-size:22px;cursor:pointer;padding:4px 8px;color:var(--txl)}
+#gtop .back:hover{color:var(--tx)}
+#gtop .info{text-align:right}
+#gtop .mode-name{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--hd)}
+#gtop .level-info{font-size:11px;color:var(--txl)}
+
+#gcore{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 16px;overflow:hidden;min-height:0}
+
+#sbar{width:100%;max-width:400px;margin:6px 0 2px;flex-shrink:0}
+#rrow{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600}
+#rlbl{color:var(--hd);font-family:'Fraunces',serif;font-size:15px}
+#plbl{color:var(--txl);font-weight:400;font-size:12px}
+#ptrack{width:100%;height:5px;background:#f0e6d0;border-radius:3px;margin-top:4px}
+#pfill{height:100%;background:linear-gradient(90deg,var(--h),#f59e0b);border-radius:3px;transition:width .4s;width:0}
+
+#msg{height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+#msg.ok{color:var(--ok)}#msg.err{color:var(--err)}#msg.pg{color:var(--hd);font-size:15px}
+
+#inp{font-family:'Fraunces',serif;font-size:26px;font-weight:700;letter-spacing:2px;min-height:36px;display:flex;align-items:center;justify-content:center;text-transform:uppercase;flex-shrink:0}
+#inp .cl{color:var(--hd)}
+#inp .cur{display:inline-block;width:2px;height:26px;background:var(--h);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+#hc-frame{position:relative;flex-shrink:0;margin:8px 0;display:flex;align-items:center;justify-content:center}
+#hc-frame::before{content:'';position:absolute;width:240px;height:260px;background:radial-gradient(ellipse at center,rgba(245,166,35,.08) 0%,rgba(245,166,35,.03) 50%,transparent 70%);pointer-events:none;z-index:0}
+#hc-frame .frame-hex{position:absolute;pointer-events:none;z-index:0}
+#hc-frame .frame-hex svg{opacity:.06;filter:blur(0.5px)}
+
+#hc{display:flex;flex-direction:column;align-items:center;gap:5px;user-select:none;flex-shrink:0;position:relative;z-index:1;padding:18px;background:radial-gradient(ellipse at center,rgba(254,243,199,.6) 0%,rgba(254,243,199,.2) 60%,transparent 80%);border-radius:50%}
+.hr{display:flex;gap:5px}
+.hx{width:62px;height:66px;position:relative;cursor:pointer;transition:transform .08s}
+.hx:active{transform:scale(.9)}
+.hx svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(180,150,80,.15))}
+.hb{fill:#f5edd5;stroke:#e5c76b;stroke-width:1.5;transition:fill .12s}
+.hx:hover .hb{fill:#ece2c8}
+.hx.ct .hb{fill:var(--h);stroke:var(--hd);stroke-width:2}
+.hx.ct:hover .hb{fill:var(--hd)}
+.hx.ct svg{filter:drop-shadow(0 2px 8px rgba(245,166,35,.4))}
+.hl{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--tx);pointer-events:none;text-transform:uppercase}
+.hx.ct .hl{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.15)}
+/* hex press animation */
+.hx.press{animation:hexPop .2s ease}
+@keyframes hexPop{0%{transform:scale(.85)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+#btns{display:flex;gap:8px;flex-shrink:0;margin:4px 0}
+.bt{padding:8px 16px;border-radius:20px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .12s;border:2px solid #d5c9a8;background:#fff;color:var(--tx)}
+.bt:hover{background:#f5edd5}
+.bt:active{transform:scale(.95)}
+.bt.pr{background:var(--h);color:#fff;border-color:var(--hd)}
+.bt.pr:hover{background:var(--hd)}
+
+/* Found words - always visible scrollable area */
+#farea{flex:1;min-height:0;width:100%;max-width:400px;display:flex;flex-direction:column;overflow:hidden;margin-top:4px;border-top:1px solid #ede5d0}
+#fhdr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;flex-shrink:0}
+#fhdr h3{font-family:'Fraunces',serif;font-size:14px;font-weight:700}
+#fhdr span{font-size:12px;color:var(--txl)}
+#fw{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start;padding:4px 0 12px;-webkit-overflow-scrolling:touch}
+.fd{padding:3px 9px;background:#f5edd5;border-radius:10px;font-size:12px;font-weight:600;text-transform:capitalize;animation:pop .25s ease}
+.fd.pg{background:linear-gradient(135deg,var(--hl),var(--h));font-weight:700}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* Toast for word found */
+.toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--hd);pointer-events:none;z-index:60;text-shadow:0 2px 8px rgba(0,0,0,.1);animation:toastPop .8s ease forwards}
+@keyframes toastPop{0%{transform:translate(-50%,-50%) scale(0);opacity:1}30%{transform:translate(-50%,-50%) scale(1.2);opacity:1}100%{transform:translate(-50%,-80%) scale(.8);opacity:0}}
+
+/* Level complete overlay */
+#complete{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:55;backdrop-filter:blur(4px)}
+#complete.show{display:flex}
+#complete .card{background:#fff;border-radius:20px;padding:28px;text-align:center;max-width:320px;width:90%;animation:slideUp .4s ease}
+@keyframes slideUp{0%{transform:translateY(40px);opacity:0}100%{transform:translateY(0);opacity:1}}
+#complete .card h2{font-family:'Fraunces',serif;font-size:24px;margin-bottom:4px}
+#complete .card .stars{font-size:36px;margin:8px 0}
+#complete .card p{font-size:14px;color:var(--txl);margin-bottom:16px;line-height:1.5}
+#complete .card .btns{display:flex;gap:8px;justify-content:center}
+
+/* Confetti */
+.confetti{position:fixed;top:-10px;width:8px;height:8px;z-index:61;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{top:110vh;transform:rotate(720deg)}}
+
+@media(max-width:370px){.hx{width:54px;height:58px}.hl{font-size:20px}#inp{font-size:22px}.bt{padding:7px 12px;font-size:12px}}
+@media(min-height:800px){#hc{margin:10px 0}}
 </style>
+<!-- App Icon as inline SVG data URI for iOS/Android home screen -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='%23f59e0b'/><text x='256' y='320' text-anchor='middle' font-size='280' font-family='serif' font-weight='bold' fill='white'>L</text><text x='256' y='440' text-anchor='middle' font-size='80'>🐝</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f59e0b'/><text x='16' y='24' text-anchor='middle' font-size='22' font-family='serif' font-weight='bold' fill='white'>L</text></svg>">
 </head>
 <body>
-<!-- LOGIN -->
-<div id="loginScreen">
-<div class="login-box">
-<div class="logo"><div>DL</div></div>
-<h2>Delta Língua</h2>
-<div class="lsub">Gestão de Tarefas — Entrar</div>
-<label>Email</label>
-<input type="email" id="loginEmail" placeholder="email@exemplo.com">
-<label>Palavra-passe</label>
-<input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-<button onclick="doLogin()">Entrar</button>
-<div class="err" id="loginErr"></div>
-<div class="linfo">🔒 Acesso restrito à equipa</div>
-</div>
-</div>
-<!-- APP -->
-<div id="sb" style="display:none">
-<div class="sh"><div class="slogo" onclick="togSb()" title="Recolher">DL</div><div id="sbB"><div class="sbr">Delta Língua</div><div class="sbs">Gestão de Tarefas</div></div><button id="sbClose" onclick="togSb()" style="margin-left:auto;background:none;border:none;color:#5da87a;font-size:22px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .15s" title="Fechar menu">✕</button></div>
-<div class="snv" id="snv"></div>
-<div class="sbt">
-<div style="font-size:10px;color:#4d8a66;padding:2px 14px 8px" id="syncStatus"><span class="sync-dot sync-on"></span> Sincronizado</div>
-<button class="bt p" onclick="addT()">➕ <span class="lbl">Nova Tarefa</span></button>
-<div class="srw"><button class="bt g" onclick="expJ()">💾 <span class="lbl">Exportar</span></button><button class="bt g" onclick="document.getElementById('impF').click()">📂 <span class="lbl">Importar</span></button></div>
-<input type="file" id="impF" accept=".json" onchange="impJ(event)" style="display:none">
-<button class="bt g" onclick="openCl()">👥 <span class="lbl">Clientes</span></button>
-<button class="bt g" onclick="expCSV()">📊 <span class="lbl">Relatório CSV</span></button>
-<div class="user-info lbl" id="userInfo"></div>
-</div>
-</div>
-<div id="mn" style="display:none">
-<div class="tb"><button id="mobMenu" onclick="togSb()" style="display:none;background:none;border:1px solid var(--brd);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:18px;color:var(--acc)">☰</button><h2 id="vT">☀️ O Meu Dia</h2><span class="dt" id="vD"></span></div>
-<div class="fbar">
-<input type="text" id="sBx" placeholder="🔍 Pesquisar..." oninput="rnd()">
-<select id="fTy" onchange="rnd()"><option value="">Tipo</option></select>
-<select id="fPr" onchange="rnd()"><option value="">Prioridade</option></select>
-<select id="fCl" onchange="rnd()"><option value="">Cliente</option></select>
-<select id="fSt" onchange="rnd()"><option value="">Estado</option></select>
-<label><input type="checkbox" id="fHD" onchange="hideDn=this.checked;rnd()" style="accent-color:var(--acc);cursor:pointer"> Excluir concluídas</label>
-</div>
-<div id="ct"></div>
-</div>
-<div id="clM" class="mo" style="display:none" onclick="if(event.target===this)closeCl()"><div class="mi wide" id="clMI"></div></div>
-<script>
-// ========== FIREBASE ==========
-firebase.initializeApp({apiKey:"AIzaSyDW5laLTKibjtk3t5LpnxHdwNlzJ0RT-dU",authDomain:"delta-tasks.firebaseapp.com",databaseURL:"https://delta-tasks-default-rtdb.europe-west1.firebasedatabase.app",projectId:"delta-tasks",storageBucket:"delta-tasks.firebasestorage.app",messagingSenderId:"765765101808",appId:"1:765765101808:web:6cb189b04f4301f6d43a35"});
-var auth=firebase.auth(),db=firebase.database();
-var currentUser=null,currentRole=null;
-function doLogin(){var email=document.getElementById("loginEmail").value.trim(),pass=document.getElementById("loginPass").value,errEl=document.getElementById("loginErr");errEl.textContent="";if(!email||!pass){errEl.textContent="Preenche email e palavra-passe.";return}
-auth.signInWithEmailAndPassword(email,pass).catch(function(err){var msg="Erro ao entrar.";if(err.code==="auth/user-not-found"||err.code==="auth/wrong-password"||err.code==="auth/invalid-credential")msg="Email ou palavra-passe incorretos.";else if(err.code==="auth/invalid-email")msg="Email inválido.";else if(err.code==="auth/too-many-requests")msg="Demasiadas tentativas.";errEl.textContent=msg})}
-auth.onAuthStateChanged(function(user){if(user){currentUser=user;db.ref("roles").once("value").then(function(snap){currentRole=(snap.val()||{})[user.uid]||"member";startApp()})}else{currentUser=null;currentRole=null;document.getElementById("loginScreen").style.display="flex";document.getElementById("sb").style.display="none";document.getElementById("mn").style.display="none"}});
-function startApp(){document.getElementById("loginScreen").style.display="none";document.getElementById("sb").style.display="flex";document.getElementById("mn").style.display="flex";
-var ui=document.getElementById("userInfo"),ini=(currentUser.email||"").substring(0,2).toUpperCase();
-ui.innerHTML='<div class="avatar">'+ini+'</div><span>'+currentUser.email+'</span><button onclick="auth.signOut()">Sair</button>';
-listenTasks();loadClients()}
 
-var tasks=[],cCl=[],vw="myday",sf="",eId=null,srt="manual",sdr="asc",shDn=true,hideDn=false;
-function listenTasks(){var tR=db.ref("tasks/team"),pR=db.ref("tasks/private/"+currentUser.uid),tT=[],pT=[];tR.off();pR.off();
-tR.on("value",function(s){tT=[];s.forEach(function(c){var t=c.val();t._fbKey=c.key;t._vis="team";tT.push(t)});tasks=tT.concat(pT);rAll()});
-pR.on("value",function(s){pT=[];s.forEach(function(c){var t=c.val();t._fbKey=c.key;t._vis="private";pT.push(t)});tasks=tT.concat(pT);rAll()});
-db.ref(".info/connected").on("value",function(s){var el=document.getElementById("syncStatus");if(s.val()===true)el.innerHTML='<span class="sync-dot sync-on"></span> Sincronizado';else el.innerHTML='<span class="sync-dot sync-off"></span> Offline'})}
-function loadClients(){db.ref("clients").on("value",function(s){cCl=s.val()||[];if(!Array.isArray(cCl))cCl=Object.values(cCl)})}
-function saveTask(t){var d=Object.assign({},t);delete d._fbKey;delete d._vis;d.updatedAt=new Date().toISOString();if(t._vis==="private"){if(t._fbKey)db.ref("tasks/private/"+currentUser.uid+"/"+t._fbKey).set(d);else db.ref("tasks/private/"+currentUser.uid).push(d)}else{if(t._fbKey)db.ref("tasks/team/"+t._fbKey).set(d);else db.ref("tasks/team").push(d)}}
-function deleteTask(t){if(t._vis==="private")db.ref("tasks/private/"+currentUser.uid+"/"+t._fbKey).remove();else db.ref("tasks/team/"+t._fbKey).remove()}
-function pushTask(t,vis){var d=Object.assign({},t);delete d._fbKey;delete d._vis;if(vis==="private")db.ref("tasks/private/"+currentUser.uid).push(d);else db.ref("tasks/team").push(d)}
-function saveClients(){db.ref("clients").set(cCl)}
-function canSetPrivate(){return currentRole==="admin"}
-var CL=["ABANCA Portugal, S.A.","Abreu Advogados","Adobe","Aldi","Altice","Banco BPI","Baker McKenzie","Clifford Chance","CMS","Continente","CP - Comboios de Portugal","CTT","Cuatrecasas","Deloitte","DLA Piper","EDP","EY","Freshfields","Galp Energia","Garrigues","Google","H&M","Hogan Lovells","Idealista","IKEA","Jerónimo Martins","KPMG","Lidl","Linklaters","Locaria","Locaria Limited","Mercadona","Microsoft Corporation","Morais Leitão","NOS","Pingo Doce","PLMJ","PwC","Raposo, Sá Miranda & Associados","RTP","SIC","Snapchat","Sonae","TAP Air Portugal","Tinder","TVI","Uría Menéndez","Vieira de Almeida","Vistatec","Vodafone","Worten","Novo Banco","Caixa Geral de Depósitos","Millennium BCP","Santander Portugal","Fidelidade","Delta Língua"];
-var TY=["Tradução","Revisão","Tradução Certificada","Tradução Criativa","Transcrição","Legendagem","Adaptação","MTPE","SEO","Edição / Copywriting","Interpretação","Localização","Scripts TV/Rádio - Criar","Scripts TV/Rádio - Rever","Criar Projeto","Enviar Proposta","Enviar PO","Faturação","Pagar Tradutor","Pagar Recibos Freelancers","Pagar Fatura Freelancer","Pagar Fatura Fornecedores","Mailing / Marketing","Pessoal","Outra"];
-var PL=["Office","XTM","Déjà Vu X3","Smartling","Phrase","memoQ","Trados","Trados GroupShare","Memsource","Wordfast","Crowdin","Plunet","Outra","N/A"];
-var PR=["Baixa","Normal","Alta","Urgente"];
-var ST=["Por iniciar","A aguardar ativação","A aguardar tradutor","A aguardar revisor","Em progresso","Traduzido","Em revisão","Revisto","Para enviar","Enviado","Faturado","Concluído"];
-var LN=["PT","EN","ES","FR","DE","IT","NL","RU","AR","ZH","JA","KO","HR","LV","RO","PL","CS","SV","DA","FI","Outro"];
-var FC={"Por iniciar":"#6b7280","A aguardar ativação":"#f59e0b","A aguardar tradutor":"#8b5cf6","A aguardar revisor":"#ec4899","Em progresso":"#2d6a4f","Traduzido":"#7c6f3e","Em revisão":"#b8860b","Revisto":"#10b981","Para enviar":"#0d9488","Enviado":"#22c55e","Faturado":"#84cc16","Concluído":"#059669"};
-var PC={"Baixa":"#9ca3af","Normal":"#2d6a4f","Alta":"#d97706","Urgente":"#ef4444"};
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function td(){return new Date().toISOString().slice(0,10)}
-function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;")}
-function fD(d){if(!d)return"";return new Date(d+"T12:00:00").toLocaleDateString("pt-PT",{day:"numeric",month:"short",year:"numeric"})}
-function allCl(){var a={};CL.forEach(function(c){a[c]=1});cCl.forEach(function(c){a[c]=1});tasks.forEach(function(t){if(t.client)a[t.client]=1});return Object.keys(a).sort()}
-function usV(k,ex){var s={};tasks.forEach(function(t){if(t[k]&&t[k]!==ex)s[t[k]]=1});return Object.keys(s).sort()}
-function cnt(k,v){return tasks.filter(function(t){return t[k]===v}).length}
-function isOD(t){if(!t.deadline||["Concluído","Faturado","Enviado"].indexOf(t.status)>=0)return false;return new Date(t.deadline+(t.deadlineTime?"T"+t.deadlineTime:"T23:59:59"))<new Date()}
-function mkT(p){return Object.assign({id:uid(),title:"",type:"Tradução",client:"",subClient:"",platform:"N/A",status:"Por iniciar",priority:"Normal",srcLang:"EN",tgtLang:"PT",startDate:td(),deadline:"",deadlineTime:"",notes:"",links:"",value:"",translator:"",reviewer:"",project:"",progress:0,important:false,myDay:false,steps:[],tags:"",estimatedHours:"",recurring:"none",createdBy:currentUser?currentUser.uid:"",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()},p||{})}
-// SIDEBAR
-function rSb(){var h="",a=function(v,s,ic,lb,n){var ac=(vw===v&&sf===(s||""))?" a":"";return'<button class="si'+ac+'" onclick="go(\''+v+'\',\''+escape(s||"")+'\')"><span class="ic">'+ic+'</span><span class="lbl">'+lb+'</span>'+(n>0?'<span class="cn">'+n+'</span>':'')+'</button>'};
-h+=a("myday","","☀️","O Meu Dia",tasks.filter(function(t){return t.myDay}).length);
-h+=a("important","","⭐","Importante",tasks.filter(function(t){return t.important}).length);
-h+=a("planned","","📅","Planeado",tasks.filter(function(t){return t.deadline}).length);
-h+=a("tasks","","📋","Todas as Tarefas",tasks.length);
-h+=a("overdue","","⚠️","Atrasadas",tasks.filter(isOD).length);
-h+='<div class="ssc">Outras Vistas</div>';
-h+=a("kanban","","📊","Kanban",0);h+=a("calendar","","📅","Calendário",0);h+=a("dashboard","","📈","Dashboard",0);
-var ut=usV("type");if(ut.length){h+='<div class="ssc">Por Tipo</div>';ut.forEach(function(t){h+=a("bytype",t,"📋",t,cnt("type",t))})}
-h+='<div class="ssc">Por Data</div>';
-h+=a("bydate","today","📌","Hoje",tasks.filter(function(t){return t.deadline===td()}).length);
-h+=a("bydate","week","📆","Esta Semana",0);
-h+=a("bydate","nodate","❓","Sem Data",tasks.filter(function(t){return!t.deadline}).length);
-document.getElementById("snv").innerHTML=h}
-function go(v,s2){vw=v;sf=unescape(s2||"");eId=null;var d=document.getElementById("det");if(d){d.className="";d.innerHTML=""}rAll()}
-function togSb(){var sb=document.getElementById("sb");sb.classList.toggle("c");var closed=sb.classList.contains("c");document.querySelectorAll(".lbl,#sbB,.ssc,.srw,.user-info,#sbClose").forEach(function(e){e.style.display=closed?"none":""})}
-// FILTERS+TITLE
-function rFl(){["fTy","fPr","fCl","fSt"].forEach(function(id){var el=document.getElementById(id),v=el.value,o;if(id==="fTy")o=TY;else if(id==="fPr")o=PR;else if(id==="fCl"){o=usV("client");if(o.length>50)o=o.slice(0,50)}else o=ST;el.innerHTML='<option value="">'+{fTy:"Tipo",fPr:"Prioridade",fCl:"Cliente",fSt:"Estado"}[id]+'</option>';o.forEach(function(x){el.innerHTML+='<option value="'+esc(x)+'"'+(v===x?' selected':'')+'>'+x+'</option>'})})}
-function rTi(){var t=document.getElementById("vT"),d=document.getElementById("vD");d.textContent="";var m={myday:"☀️ O Meu Dia",important:"⭐ Importante",planned:"📅 Planeado",tasks:"📋 Todas as Tarefas",overdue:"⚠️ Atrasadas",kanban:"📊 Kanban",calendar:"📅 Calendário",dashboard:"📈 Dashboard"};if(m[vw])t.textContent=m[vw];else if(vw==="bytype")t.textContent="📋 "+sf;else if(vw==="bystatus")t.textContent="🔄 "+sf;else if(vw==="bydate"){var dm={today:"Hoje",week:"Esta Semana",nodate:"Sem Data"};t.textContent="📅 "+(dm[sf]||"Por Data")}if(vw==="myday")d.textContent=new Date().toLocaleDateString("pt-PT",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
-// TASK LIST
-function gF(){var f=tasks.slice();if(vw==="myday")f=f.filter(function(t){return t.myDay});else if(vw==="important")f=f.filter(function(t){return t.important});else if(vw==="planned")f=f.filter(function(t){return t.deadline});else if(vw==="overdue")f=f.filter(isOD);else if(vw==="bytype"&&sf)f=f.filter(function(t){return t.type===sf});else if(vw==="bystatus"&&sf)f=f.filter(function(t){return t.status===sf});else if(vw==="bydate"){if(sf==="today")f=f.filter(function(t){return t.deadline===td()});else if(sf==="week"){var w=new Date();w.setDate(w.getDate()+7);f=f.filter(function(t){return t.deadline&&new Date(t.deadline)<=w&&new Date(t.deadline)>=new Date(td())})}else if(sf==="nodate")f=f.filter(function(t){return!t.deadline})}
-var s=document.getElementById("sBx").value.toLowerCase();if(s)f=f.filter(function(t){return(t.title+t.client+t.notes+t.project+t.type).toLowerCase().indexOf(s)>=0});
-var ft=document.getElementById("fTy").value;if(ft)f=f.filter(function(t){return t.type===ft});var fp=document.getElementById("fPr").value;if(fp)f=f.filter(function(t){return t.priority===fp});var fc=document.getElementById("fCl").value;if(fc)f=f.filter(function(t){return t.client===fc});var fs=document.getElementById("fSt").value;if(fs)f=f.filter(function(t){return t.status===fs});
-if(hideDn)f=f.filter(function(t){return["Concluído","Faturado"].indexOf(t.status)<0});return f}
-function rnd(){var c=document.getElementById("ct");
-if(vw==="kanban"){eId=null;c.innerHTML='<div id="kanA" class="kan"></div>';rKan();return}
-if(vw==="calendar"){eId=null;c.innerHTML='<div id="calA" class="cal"></div>';rCal();return}
-if(vw==="dashboard"){eId=null;c.innerHTML='<div id="dashA" class="dash"></div>';rDash();return}
-c.innerHTML='<div id="lst" style="flex:1;overflow-y:scroll;padding:8px 32px 20px"></div><div id="det"></div>';
-var f=gF(),l=document.getElementById("lst"),h="";
-if(srt!=="manual"){var dr=sdr==="asc"?1:-1;f.sort(function(a,b){if(srt==="deadline"){var da=a.deadline||"9999",db=b.deadline||"9999";return da<db?-dr:da>db?dr:0}if(srt==="priority"){var po={Urgente:0,Alta:1,Normal:2,Baixa:3};return(po[a.priority]-po[b.priority])*dr}if(srt==="client")return(a.client||"").localeCompare(b.client||"")*dr;if(srt==="title")return(a.title||"").localeCompare(b.title||"")*dr;if(srt==="progress")return(a.progress-b.progress)*dr;return 0})}
-var pn=f.filter(function(t){return["Concluído","Faturado"].indexOf(t.status)<0}),dn=f.filter(function(t){return["Concluído","Faturado"].indexOf(t.status)>=0});
-h+='<div style="display:flex;gap:10px;margin-bottom:16px;align-items:center"><div style="flex:1;display:flex;align-items:center;background:var(--card);border:1px solid var(--brd);border-radius:100px;padding:4px 6px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><button onclick="qAdd()" style="width:36px;height:36px;border-radius:50%;background:var(--input);border:1px solid var(--brd);cursor:pointer;font-size:16px;color:var(--acc);display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button><input type="text" id="qA" placeholder="Adicionar tarefa..." onkeydown="if(event.key===\'Enter\')qAdd()" style="flex:1;padding:10px 14px;border:none;background:transparent;color:var(--text);font-size:15px;outline:none;font-weight:400"></div></div>';
-h+='<div class="sb2"><span>Ordenar:</span>';
-[["manual","Padrão"],["deadline","📅 Deadline"],["priority","🔥 Prioridade"],["client","👤 Cliente"],["title","🔤 Nome"],["progress","📊 Progresso"]].forEach(function(s2){h+='<button class="'+(srt===s2[0]?"ac":"")+'" onclick="setSrt(\''+s2[0]+'\')">'+s2[1]+(srt===s2[0]?(sdr==="asc"?" ↑":" ↓"):"")+'</button>'});
-h+='<span style="margin-left:auto;font-weight:600">'+f.length+' tarefa'+(f.length!==1?"s":"")+'</span></div>';
-if(!f.length)h+='<div class="empty"><div class="big">📭</div><div>Nenhuma tarefa</div><button onclick="addT()">➕ Criar</button></div>';
-else{var idx=0;pn.forEach(function(t){h+=tRow(t,idx++);});if(dn.length){h+='<div class="ds"><button class="dt2" onclick="shDn=!shDn;rnd()"><span>'+(shDn?"▼":"▶")+'</span><span>Concluídas ('+dn.length+')</span></button>';if(shDn)dn.forEach(function(t){h+=tRow(t,idx++);});h+='</div>'}}
-l.innerHTML=h;shDet()}
-function tRow(t,i){var od=isOD(t),cl="tr"+(od?" od":""),isDn=["Concluído","Faturado"].indexOf(t.status)>=0;
-var tg='<span class="tag" style="background:'+(FC[t.status]||"#6b7280")+'22;color:'+(FC[t.status]||"#6b7280")+'">'+t.status+'</span>';
-tg+='<span class="vis-badge '+(t._vis==="private"?"vis-private":"vis-team")+'">'+(t._vis==="private"?"🔒":"👥")+'</span>';
-if(t.type)tg+='<span class="tag" style="background:#f0f4f1;color:var(--sub)">'+t.type+'</span>';
-if(t.deadline)tg+='<span style="color:'+(od?"#ef4444":"var(--sub)")+'">📅 '+fD(t.deadline)+(t.deadlineTime?" "+t.deadlineTime:"")+'</span>';
-if(t.client)tg+='<span style="color:var(--sub)">👤 '+esc(t.client)+'</span>';
-if(t.translator)tg+='<span style="color:var(--sub)">🧑‍💼 '+esc(t.translator)+'</span>';
-if(t.srcLang&&t.tgtLang)tg+='<span style="color:var(--sub)">'+t.srcLang+'→'+t.tgtLang+'</span>';
-if(t.tags){t.tags.split(",").forEach(function(g){g=g.trim();if(g){var ci=0;for(var j=0;j<g.length;j++)ci+=g.charCodeAt(j);var co=["#2d6a4f","#b8860b","#7c3aed","#0d9488","#dc2626","#2563eb"][ci%6];tg+='<span class="tag" style="background:'+co+'18;color:'+co+'">'+esc(g)+'</span>'}})}
-var pg=t.progress>0&&t.progress<100?'<div class="pb"><div style="width:'+t.progress+'%"></div></div>':"";
-var pco=PC[t.priority]||"#2d6a4f";
-return'<div class="'+cl+'" onclick="opT(\''+t.id+'\')"><div class="pdot" style="background:'+pco+'"></div><input type="checkbox" '+(isDn?"checked":"")+" onclick=\"event.stopPropagation();togDn('"+t.id+"')\" /><div class=\"ti\"><div class=\"tt"+(isDn?" dn":"")+"\">"+(esc(t.title)||"Sem título")+'</div><div class="tg">'+tg+"</div>"+pg+'</div><span class="pct">'+(t.progress||0)+'%</span><button class="star'+(t.important?" on":"")+'" onclick="event.stopPropagation();togP(\''+t.id+"','important')\">"+(t.important?"⭐":"☆")+"</button></div>"}
-// ACTIONS
-function opT(id){eId=id;shDet()}
-function addT(){var t=mkT({myDay:vw==="myday"});pushTask(t,"team");eId=t.id}
-function delT(id){if(!confirm("Eliminar?"))return;var t=tasks.find(function(x){return x.id===id});if(!t)return;deleteTask(t);if(eId===id)eId=null}
-function togDn(id){var t=tasks.find(function(x){return x.id===id});if(!t)return;var w=t.status==="Concluído";t.status=w?"Por iniciar":"Concluído";if(!w)t.progress=100;if(!w&&t.recurring&&t.recurring!=="none"&&t.deadline){var n=mkT(JSON.parse(JSON.stringify(t)));n.id=uid();n.status="Por iniciar";n.progress=0;var d=new Date(t.deadline);if(t.recurring==="daily")d.setDate(d.getDate()+1);else if(t.recurring==="weekly")d.setDate(d.getDate()+7);else if(t.recurring==="monthly")d.setMonth(d.getMonth()+1);n.deadline=d.toISOString().slice(0,10);n.createdAt=new Date().toISOString();pushTask(n,t._vis||"team")}t.updatedAt=new Date().toISOString();saveTask(t)}
-function togP(id,k){var t=tasks.find(function(x){return x.id===id});if(!t)return;t[k]=!t[k];t.updatedAt=new Date().toISOString();saveTask(t)}
-function dupT(id){var t=tasks.find(function(x){return x.id===id});if(!t)return;var n=mkT(JSON.parse(JSON.stringify(t)));n.id=uid();n.title=(t.title||"")+" (cópia)";n.status="Por iniciar";n.progress=0;n.createdAt=new Date().toISOString();pushTask(n,t._vis||"team");eId=n.id}
-function qAdd(){var i=document.getElementById("qA");if(!i||!i.value.trim())return;var t=mkT({title:i.value.trim(),myDay:vw==="myday"});pushTask(t,"team");i.value=""}
-function setSrt(s){if(srt===s)sdr=sdr==="asc"?"desc":"asc";else{srt=s;sdr="asc"}rnd()}
-function upd(k,v){var t=tasks.find(function(x){return x.id===eId});if(!t)return;if(k==="progress")v=parseInt(v)||0;t[k]=v;t.updatedAt=new Date().toISOString();saveTask(t);rSb();rTi();rnd()}
-function setProg(v){var t=tasks.find(function(x){return x.id===eId});if(!t)return;t.progress=v;t.updatedAt=new Date().toISOString();saveTask(t);rnd()}
-function togF2(k){var t=tasks.find(function(x){return x.id===eId});if(!t)return;t[k]=!t[k];t.updatedAt=new Date().toISOString();saveTask(t)}
-function changeVis(vis){var t=tasks.find(function(x){return x.id===eId});if(!t||t._vis===vis)return;deleteTask(t);var d=Object.assign({},t);delete d._fbKey;delete d._vis;if(vis==="private")db.ref("tasks/private/"+currentUser.uid).push(d);else db.ref("tasks/team").push(d)}
-// DETAIL
-function shDet(){var el=document.getElementById("det");if(!el){eId=null;return}var sc=el.scrollTop;if(!eId){el.className="";el.innerHTML="";return}var t=tasks.find(function(x){return x.id===eId});if(!t){eId=null;el.className="";return}el.className="open";var od=isOD(t);
-var so=function(a,v){return a.map(function(o){return'<option value="'+o+'"'+(v===o?" selected":"")+">"+o+"</option>"}).join("")};
-var h='<div class="dh"><span>Detalhes</span><div><button onclick="togF2(\'myDay\')" style="background:'+(t.myDay?"#fbbf24":"")+'">☀️</button><button onclick="togF2(\'important\')" style="background:'+(t.important?"#fbbf24":"")+'">⭐</button><button onclick="dupT(\''+t.id+'\')">📋</button><button class="del" onclick="delT(\''+t.id+'\')">🗑️</button><button onclick="eId=null;shDet()">✕</button></div></div>';
-if(od)h+='<div class="odb">⚠️ ATRASADO</div>';
-if(canSetPrivate()){h+='<div class="fl"><label>👁️ Visibilidade</label><select onchange="changeVis(this.value)"><option value="team"'+(t._vis!=="private"?" selected":"")+'>👥 Equipa</option><option value="private"'+(t._vis==="private"?" selected":"")+'>🔒 Privada</option></select></div>'}else{h+='<div style="margin-bottom:8px"><span class="vis-badge vis-team">👥 Equipa</span></div>'}
-h+='<div class="fl"><label>📝 Título</label><input value="'+esc(t.title)+'" onchange="upd(\'title\',this.value)"></div>';
-h+='<div class="g2"><div class="fl"><label>📋 Tipo</label><select onchange="upd(\'type\',this.value)">'+so(TY,t.type)+'</select></div><div class="fl"><label>🔄 Estado</label><select onchange="upd(\'status\',this.value)">'+so(ST,t.status)+'</select></div><div class="fl"><label>🔥 Prioridade</label><select onchange="upd(\'priority\',this.value)">'+so(PR,t.priority)+'</select></div><div class="fl"><label>💻 Plataforma</label><select onchange="upd(\'platform\',this.value)">'+so(PL,t.platform)+'</select></div><div class="fl"><label>🌍 Origem</label><select onchange="upd(\'srcLang\',this.value)">'+so(LN,t.srcLang)+'</select></div><div class="fl"><label>🎯 Destino</label><select onchange="upd(\'tgtLang\',this.value)">'+so(LN,t.tgtLang)+'</select></div></div>';
-h+='<div class="fl ac2"><label>👤 Cliente</label><input id="clI" value="'+esc(t.client)+'" oninput="clSg(this.value)" onchange="upd(\'client\',this.value)" autocomplete="off"><div class="sg" id="clS"></div></div>';
-h+='<div class="fl"><label>📁 Projeto</label><input value="'+esc(t.project)+'" onchange="upd(\'project\',this.value)"></div>';
-h+='<div class="g2"><div class="fl"><label>🧑‍💼 Tradutor</label><input value="'+esc(t.translator)+'" onchange="upd(\'translator\',this.value)"></div><div class="fl"><label>🔍 Revisor</label><input value="'+esc(t.reviewer)+'" onchange="upd(\'reviewer\',this.value)"></div><div class="fl"><label>📅 Início</label><input type="date" value="'+(t.startDate||"")+'" onchange="upd(\'startDate\',this.value)"></div><div class="fl"><label>⏰ Deadline</label><input type="date" value="'+(t.deadline||"")+'" onchange="upd(\'deadline\',this.value)"></div></div>';
-h+='<div class="fl"><label>🕐 Hora</label><input type="time" value="'+(t.deadlineTime||"")+'" onchange="upd(\'deadlineTime\',this.value)"></div>';
-h+='<div class="g2"><div class="fl"><label>💰 Valor €</label><input value="'+esc(t.value)+'" onchange="upd(\'value\',this.value)"></div><div class="fl"><label>⏱️ Horas</label><input value="'+esc(t.estimatedHours)+'" onchange="upd(\'estimatedHours\',this.value)"></div></div>';
-h+='<div class="fl"><label>📊 Progresso</label><div style="display:flex;align-items:center;gap:4px;margin-top:4px">';
-[0,10,25,50,75,100].forEach(function(v){h+='<button onclick="setProg('+v+')" style="padding:4px 8px;border-radius:6px;border:1px solid '+((t.progress||0)===v?"#2d6a4f":"var(--brd)")+';background:'+((t.progress||0)===v?"#2d6a4f":"var(--input)")+';color:'+((t.progress||0)===v?"#fff":"var(--text)")+';font-size:11px;font-weight:500;cursor:pointer">'+v+'%</button>'});
-h+='</div><div class="pgb"><div style="width:'+(t.progress||0)+'%"></div></div></div>';
-h+='<div class="fl"><label>🔁 Recorrência</label><select onchange="upd(\'recurring\',this.value)"><option value="none"'+(t.recurring==="none"?" selected":"")+'>Sem</option><option value="daily"'+(t.recurring==="daily"?" selected":"")+'>Diária</option><option value="weekly"'+(t.recurring==="weekly"?" selected":"")+'>Semanal</option><option value="monthly"'+(t.recurring==="monthly"?" selected":"")+'>Mensal</option></select></div>';
-h+='<div class="fl"><label>🏷️ Tags</label><input value="'+esc(t.tags)+'" onchange="upd(\'tags\',this.value)" placeholder="tag1, tag2..."></div>';
-h+='<div class="fl"><label>🔗 Links</label><input value="'+esc(t.links)+'" onchange="upd(\'links\',this.value)"></div>';
-if(t.links&&t.links.indexOf("http")===0)h+='<a href="'+esc(t.links)+'" target="_blank" style="font-size:11px;color:var(--acc);display:block;margin-bottom:8px">Abrir ↗</a>';
-h+='<div class="fl"><label>📝 Notas</label><textarea rows="3" onchange="upd(\'notes\',this.value)">'+esc(t.notes)+'</textarea></div>';
-h+='<div class="fl"><label>✅ Passos</label><div id="stA"></div><button onclick="addStp()" style="font-size:11px;color:var(--acc);background:0;border:0;cursor:pointer;margin-top:4px">+ Passo</button></div>';
-el.innerHTML=h;el.scrollTop=sc;rStp()}
-function rStp(){var t=tasks.find(function(x){return x.id===eId});if(!t)return;var a=document.getElementById("stA");if(!a)return;a.innerHTML="";(t.steps||[]).forEach(function(s,i){var d=document.createElement("div");d.style.cssText="display:flex;align-items:center;gap:6px;margin-bottom:4px";d.innerHTML='<input type="checkbox" '+(s.done?"checked":"")+'><input type="text" value="'+esc(s.text)+'" style="flex:1;padding:4px 6px;border-radius:4px;border:1px solid var(--brd);background:0;color:var(--text);font-size:12px;'+(s.done?"text-decoration:line-through":"")+'"><button style="background:0;border:0;color:#ef4444;cursor:pointer;font-size:14px">×</button>';d.querySelector("input[type=checkbox]").onchange=function(){t.steps[i].done=!t.steps[i].done;saveTask(t);rStp()};d.querySelector("input[type=text]").onchange=function(){t.steps[i].text=this.value;saveTask(t)};d.querySelector("button").onclick=function(){t.steps.splice(i,1);saveTask(t);rStp()};a.appendChild(d)})}
-function addStp(){var t=tasks.find(function(x){return x.id===eId});if(!t)return;if(!t.steps)t.steps=[];t.steps.push({text:"",done:false});saveTask(t);rStp()}
-function clSg(v){var sg=document.getElementById("clS");if(!v){sg.style.display="none";return}var f=allCl().filter(function(c){return c.toLowerCase().indexOf(v.toLowerCase())>=0}).slice(0,8);if(!f.length){sg.style.display="none";return}sg.style.display="block";sg.innerHTML="";f.forEach(function(c){var d=document.createElement("div");d.textContent=c;d.onmousedown=function(){upd("client",c);document.getElementById("clI").value=c;sg.style.display="none"};sg.appendChild(d)})}
-// KANBAN — 4 colunas fixas que agrupam estados
-var _kanDragId=null;
-var kanGroups=[
-{name:"Por iniciar",color:"#6b7280",match:function(s){return["Por iniciar","A aguardar ativação","A aguardar tradutor","A aguardar revisor"].indexOf(s)>=0}},
-{name:"Em curso",color:"#2d6a4f",match:function(s){return["Em progresso","Traduzido","Em revisão","Revisto"].indexOf(s)>=0}},
-{name:"Em revisão final",color:"#b8860b",match:function(s){return["Para enviar","Enviado","Faturado"].indexOf(s)>=0}},
-{name:"Concluído",color:"#059669",match:function(s){return s==="Concluído"}}
+<!-- SPLASH SCREEN -->
+<div id="splash" onclick="skipSplash()">
+  <div class="splash-hex">⬡</div><div class="splash-hex">⬡</div><div class="splash-hex">⬡</div>
+  <div class="bee" id="splashBee">🐝</div>
+  <h1>Letreiro</h1>
+  <p>O Caça-Palavras do Favo</p>
+  <p style="max-width:280px;text-align:center;color:#92400e;font-size:14px;line-height:1.6;margin-top:14px;opacity:.85">Descobre palavras usando 7 letras num favo de mel.<br>A <b>letra central</b> é sempre obrigatória!<br>Mínimo 4 letras por palavra.</p>
+  <div style="margin-top:24px;color:#92400e;font-size:15px;font-weight:600;animation:pulse 1.5s ease-in-out infinite;cursor:pointer">Toca para jogar ▸</div>
+  <div style="position:absolute;bottom:20px;font-size:11px;color:rgba(146,64,14,0.4);font-weight:400">© José Carlos Bernardes — 2026</div>
+</div>
+
+<!-- MENU -->
+<div id="menu" class="gone">
+  <header>
+    <h1>Letr<span>eiro</span></h1>
+    <span class="bee2">🐝</span>
+    <p class="tagline">Forma palavras com 7 letras num favo de mel. Inclui sempre a letra central!</p>
+  </header>
+
+  <div class="rules-box" style="margin-top:12px;margin-bottom:16px;background:#fff8ee;border:2px solid #e5c76b;padding:16px 18px">
+    <h3 style="font-size:18px;margin-bottom:10px;color:#92400e">📖 Como Jogar</h3>
+    <ul style="list-style:none;margin:0;padding:0">
+      <li style="font-size:15px;color:#5a4a2a;line-height:1.8;margin:0;padding:2px 0">🔤 Forma palavras com <b>mínimo 4 letras</b></li>
+      <li style="font-size:15px;color:#5a4a2a;line-height:1.8;margin:0;padding:2px 0">⭐ A <b style="color:#d97706">letra central</b> (dourada) é obrigatória</li>
+      <li style="font-size:15px;color:#5a4a2a;line-height:1.8;margin:0;padding:2px 0">🔁 Podes repetir letras na mesma palavra</li>
+      <li style="font-size:15px;color:#5a4a2a;line-height:1.8;margin:0;padding:2px 0">🎉 <b>Pangrama</b> = usar todas as 7 letras → bónus +7 pts!</li>
+      <li style="font-size:14px;color:#8a7a5a;line-height:1.8;margin:0;padding:4px 0 0">📊 4 letras = 1 pt · 5+ letras = 1 pt por letra</li>
+    </ul>
+  </div>
+
+  <div class="mode-section">
+    <h2>🎮 Modos de Jogo</h2>
+
+    <div class="mode-card" onclick="startGame('classic','easy')">
+      <h3>🌸 Clássico — Fácil</h3>
+      <p>Descobre todas as palavras sem limite de tempo. Letras reutilizáveis. Ideal para relaxar.</p>
+      <div class="diff"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+
+    <div class="mode-card" onclick="startGame('classic','medium')">
+      <h3>🔥 Clássico — Médio</h3>
+      <p>Mais palavras para encontrar. Precisas de vocabulário sólido!</p>
+      <div class="diff"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+    </div>
+
+    <div class="mode-card" onclick="startGame('classic','hard')">
+      <h3>💎 Clássico — Difícil</h3>
+      <p>Centenas de palavras possíveis. Para verdadeiros génios da língua!</p>
+      <div class="diff"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+    </div>
+
+    <h2 style="margin-top:20px">⚡ Desafios</h2>
+
+    <div class="mode-card" onclick="startGame('blitz','medium')">
+      <h3>⏱️ Blitz — 2 Minutos</h3>
+      <p>Quantas palavras consegues em 2 minutos? Contra o relógio!</p>
+      <span class="badge">NOVO</span>
+      <div class="diff"><div class="dot on"></div><div class="dot on"></div><div class="dot"></div></div>
+    </div>
+
+    <div class="mode-card" onclick="startGame('unique','medium')">
+      <h3>🎯 Letras Únicas</h3>
+      <p>Cada letra do favo só pode ser usada UMA vez por palavra. Muito mais difícil!</p>
+      <span class="badge">NOVO</span>
+      <div class="diff"><div class="dot on"></div><div class="dot on"></div><div class="dot on"></div></div>
+    </div>
+
+    <div class="mode-card" onclick="startGame('zen','easy')">
+      <h3>🧘 Zen</h3>
+      <p>Sem pontos, sem pressão. Descobre palavras ao teu ritmo. Perfeito para aprender.</p>
+      <div class="diff"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;padding:12px 0 8px;text-align:center;font-size:11px;color:#b8a88a;font-weight:400;letter-spacing:0.3px;width:100%">
+    © José Carlos Bernardes — 2026
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game">
+  <div id="gtop">
+    <button class="back" onclick="backToMenu()">← </button>
+    <div class="info">
+      <div class="mode-name" id="gmode"></div>
+      <div class="level-info" id="glevel"></div>
+    </div>
+  </div>
+  <div id="gcore">
+    <div id="sbar"><div id="rrow"><span id="rlbl">Iniciante</span><span id="plbl">0 pts</span></div><div id="ptrack"><div id="pfill"></div></div></div>
+    <div id="timer" style="font-size:20px;font-family:'Fraunces',serif;font-weight:900;color:#dc2626;display:none;margin:2px 0"></div>
+    <div id="help-bar" style="width:100%;max-width:400px;background:#fef9ee;border:1px solid #ede5d0;border-radius:8px;padding:6px 10px;margin:4px 0;font-size:11px;color:#8a7a5a;line-height:1.4;flex-shrink:0;text-align:center">
+📖 Mín. 4 letras · Letra <b style="color:#d97706">central</b> obrigatória · Podes repetir letras · Pangrama = todas as 7 letras 🎉
+</div>
+<div id="msg">&nbsp;</div>
+    <div id="inp"><span class="cur"></span></div>
+    <div id="hc-frame">
+      <!-- Decorative background hexagons -->
+      <div class="frame-hex" style="top:-18px;left:-14px"><svg width="50" height="55" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="top:-18px;right:-14px"><svg width="45" height="50" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="bottom:-16px;left:-20px"><svg width="40" height="44" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="bottom:-16px;right:-18px"><svg width="48" height="52" viewBox="0 0 100 110"><polygon fill="#d4a017" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="top:50%;left:-28px;transform:translateY(-50%)"><svg width="36" height="40" viewBox="0 0 100 110"><polygon fill="#e5c76b" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div class="frame-hex" style="top:50%;right:-28px;transform:translateY(-50%)"><svg width="36" height="40" viewBox="0 0 100 110"><polygon fill="#e5c76b" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg></div>
+      <div id="hc"></div>
+    </div>
+    <div id="btns">
+      <button class="bt" onclick="del()">⌫</button>
+      <button class="bt" onclick="shuf()">🔀</button>
+      <button class="bt pr" onclick="submit()">Enviar</button>
+    </div>
+    <div style="display:flex;gap:8px;margin:2px 0 4px;flex-shrink:0">
+      <button class="bt" onclick="novasLetras()" style="font-size:12px;padding:6px 14px;opacity:.7">🔄 Novas letras</button>
+      <button class="bt" onclick="desistir()" style="font-size:12px;padding:6px 14px;opacity:.7;color:#dc2626;border-color:#e5c5c5">💡 Solução — Desisto!</button>
+    </div>
+    <div id="farea">
+      <div id="fhdr"><h3>Encontradas: <span id="fc">0</span></h3><span id="ftotal"></span></div>
+      <div id="fw"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEVEL COMPLETE -->
+<div id="complete">
+  <div class="card">
+    <h2 id="cTitle"></h2>
+    <div class="stars" id="cStars"></div>
+    <p id="cMsg" style="white-space:pre-line;max-height:180px;overflow-y:auto;font-size:13px;line-height:1.5;text-align:left"></p>
+    <div class="btns">
+      <button class="bt" onclick="backToMenu()">Menu</button>
+      <button class="bt" onclick="novasLetras();document.getElementById('complete').classList.remove('show')">Novas letras</button>
+      <button class="bt pr" onclick="nextPuzzle()">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PZ={"easy":[{"c":"d","o":"eofxul","w":"dedo|defluo|defluxo|dele|doeu|dolo|doou|duelo|elude|eludo|exodo|fede|fedeu|fedo|feudo|lodo|ludo"},{"c":"x","o":"psoaum","w":"puxa|puxam|puxamos|puxao|puxas|puxo|puxos|puxou|saxao"},{"c":"q","o":"psroeu","w":"espeque|peque|pesque|pesques|porque|porques|queque|quer|querer|queres|quero|requer|rosque|rosques|seque|sequer|seques|soque|soques"},{"c":"z","o":"dsaeum","w":"aduzam|aduzas|aduzem|aduzes|assaz|audaz|audazes|azeda|azedada|azedam|azedas|azede|azedem|azedes|azedume|deduz|deduza|deduzam|deduzas|deduzem|deduzes|mudez|seduz|seduza|seduzam|seduzas|seduzem|seduzes"},{"c":"x","o":"dnioaf","w":"afixa|afixada|afixado|afixai|afixo|dioxido|dioxina|faixa|faixada|faixado|faixai|faixo|faxina|faxinai|faxino|fixa|fixada|fixado|fixai|fixando|fixo|inox|oxida|oxidada|oxidado|oxidai|oxido"},{"c":"x","o":"sraofu","w":"afrouxa|afrouxo|arroxa|arroxar|arroxas|arroxo|arroxou|frouxa|frouxas|frouxo|frouxos|roxa|roxas|roxo|roxos|saxao"},{"c":"x","o":"nitoel","w":"eixo|enxote|enxotei|enxoto|exile|exilei|exilio|exilo|exito|extinto|inox|lixe|lixei|lixento|lixo|nexo|teixo|telex|textil|texto|xenon|xileno"},{"c":"h","o":"dnsoeu","w":"desenhe|desenho|desunhe|desunho|huno|hunos|nenhuns|sonhe|sonhes|sonho|sonhos|sonhou"},{"c":"h","o":"mritel","w":"ilhe|trilhe|trilhei|trilhem"},{"c":"q","o":"niefum","w":"finque|finquei|finquem|fique|fiquei|fiquem|inquine|niquei|queime|queimei|queimem|quem|queque|quine|quinei|quinem"},{"c":"h","o":"bsroec","w":"broche|broches|brocho|checo|checos|choche|choches|chocho|chochos|choco|chocos|choes|chore|chores|choro|choroes|choros|choroso|cocho|creche|creches|croche|horror|rochoso"},{"c":"x","o":"dbaeum","w":"debuxa|debuxam|debuxe|debuxem|exame|exuma|exumada|exumam|exume|exumem|mexa|mexam|mexe|mexem|mexeu"},{"c":"h","o":"ietofl","w":"filho|filhote|folheto|folho|helio|hotel|ilhe|ilho|olhe|olhei|olho|tolhe|tolhei|tolhi|tolho"},{"c":"q","o":"pieaul","w":"aplaque|aplique|aquela|aquele|aqui|equipa|equipai|equipe|equipei|laqueai|laqueei|laquei|laqueia|laqueie|leque|peque|pequei|pique|piquei|qual|queque"},{"c":"z","o":"nbiaem","w":"ameniza|amenize|anemiza|anemize|azia|banza|banzai|banzam|banze|banzei|banzem|benza|benzam|benze|benzei|benzem|benzi|benzia|benziam|benzina|enzima|inimiza|inimize|meninez|nazi"},{"c":"q","o":"niaefu","w":"afinque|aqui|equina|fanique|finque|finquei|fique|fiquei|inquina|inquine|niquei|queque|quina|quinai|quine|quinei"},{"c":"q","o":"srtoeu","w":"estoque|estuque|queque|quer|querer|queres|quero|questor|requer|retoque|roquete|rosque|rosques|seque|sequer|seques|soque|soques|toque|toques|touque|touques|troque|troques|truque|truques|turques"},{"c":"z","o":"vsioau","w":"assaz|azia|azuis|suaviza|suavizo|vaza|vazai|vazais|vazao|vazas|vazava|vazavas|vazia|vaziai|vaziais|vazias|vaziava|vazio|vazios|vaziou|vazou|vivaz|zoais|zoas|zoava|zoavas"},{"c":"z","o":"dnsiou","w":"induz|induzi|induzis|induziu|induzo|ionizo|ionizou|ozonio|ozonizo|ozono|zonzo|zonzos|zunido|zunidos|zunzuns"},{"c":"q","o":"meoaul","w":"aloque|aloquem|alouque|amouque|aquela|aquele|aquem|laqueou|leque|maluque|moleque|qual|quao|quem|queque"},{"c":"j","o":"bsieul","w":"beije|beijei|beijeis|beijes|jejue|jejuei|jejueis|jejues|jubile|jubilei|jubiles|jubileu|suje|sujei|sujeis|sujes"},{"c":"z","o":"aojeul","w":"azul|azula|azule|azuleja|azulejo|azulo|azulou|jaza|jaze|jazeu|jazo|luza|luzo|zela|zele|zelo|zelou"},{"c":"x","o":"srtoau","w":"arroxa|arroxar|arroxas|arroxo|arroxou|roxa|roxas|roxo|roxos|saxao|tarraxa|tarraxo|taxa|taxar|taxara|taxarao|taxaras|taxas|taxo|taxou|torax"},{"c":"d","o":"poeful","w":"dedo|defluo|dele|depoe|doeu|dolo|doou|dope|dopo|duelo|duplo|elude|eludo|fede|fedeu|fedo|felpudo|feudo|lodo|ludo|pede|peludo|pode|podou|polpudo|pude"},{"c":"q","o":"iztoeu","w":"queque|quiete|quietei|quieto|quietou|quite|quitei|quito|quitou|tique|toque|toquei|touque|touquei"},{"c":"q","o":"riaexu","w":"aqui|arque|arqueai|arquear|arqueei|arquei|arqueia|arqueie|exequia|queira|queixa|queixai|queixar|queixe|queixei|queque|quer|querei|querer|querera|queria|requer|requeri|xeque"},{"c":"q","o":"nihoau","w":"aqui|iniquo|inquina|inquino|quao|quina|quinai|quinhao|quinino|quino|quinou"},{"c":"f","o":"vioexl","w":"feixe|fiei|fiel|file|filei|filie|filiei|filio|filo|fixe|fixei|fixo|fofo|fole|folie|foliei|folio|foliolo"},{"c":"h","o":"nbatoe","w":"anho|antanho|atenha|atenho|banha|banhe|banho|obtenha|obtenho|tenha|tenho"},{"c":"x","o":"nigate","w":"anexa|anexai|anexe|anexei|exata|exige|exigi|exigia|extinga|extinta|inexata|taxa|taxai|taxe|taxei|taxi|texana|xiita|xinga|xingai"}],"medium":[{"c":"h","o":"msioal","w":"alho|alhos|halo|holismo|homilia|homilio|homo|ilha|ilhais|ilhal|ilhamos|ilho|lhas|lhos|malha|malhai|malhais|malham|malhao|malhas|malho|malhos|milha|milhal|milhao|milhas|milho|milhos|molha|molhai|molhais|molham|molhas|molho|molhos|olha|olhai|olhais|olhal|olham|olhamos|olhas|olho|olhos|solha|solhas"},{"c":"z","o":"drtoau","w":"arroz|atroz|audaz|azar|azara|azarada|azarado|azarar|azarara|azaro|azarou|azota|azotada|azotado|azotar|azotara|azoto|azotou|razao|razoa|razoada|razoado|razoar|razoara|razoo|razoou|tardoz|traduz|traduza|traduzo|traz|zoada|zoado|zoador|zoadora|zoar|zoara|zoarao|zorra|zorro|zurra|zurrada|zurrado|zurrar|zurrara|zurro|zurrou|zurza|zurzo"},{"c":"h","o":"nsriea","w":"aninha|aninhai|aninhar|aninhas|aninhe|aninhei|aninhes|aranha|aranhas|arranha|arranhe|asinha|asinhas|assanha|assanhe|harens|heis|hera|heras|heresia|hernia|hernias|hiena|hienas|ninha|rainha|rainhas|resenha|resenhe|sanha|senha|senhas"},{"c":"n","o":"giaexu","w":"anexa|anexai|anexe|anexei|angina|anua|anui|anuia|anuiu|engana|enganai|engane|enganei|enguia|enxagua|enxague|enxuga|enxugai|gana|gane|ganga|gani|ganiu|gene|genuina|ginga|gingai|gingue|ginguei|guina|guinai|guinei|iene|ignea|iguana|nana|nanai|nane|nanei|nega|negai|negue|neguei|nene|nina|ninai|nine|unge|ungi|ungia|ungiu|unia|uniu|xinga|xingai|xingue|xinguei"},{"c":"d","o":"pnriou","w":"diodo|diurno|doido|doiro|doirou|dono|doou|dopo|dorido|dourou|duro|durou|indio|indo|inodoro|inundo|inundou|iodo|iridio|nodo|odio|odiou|odor|odoro|opondo|podido|podio|podou|podrido|pondo|prurido|pudor|punido|punidor|punindo|rido|rindo|rodo|rodopio|rodou|roido|rondo|rondou|ruido|ruindo|unido|unindo|urdi|urdido|urdidor|urdindo|urdir|urdiu|urdo"},{"c":"z","o":"dreoal","w":"arroz|arrozal|azar|azara|azarada|azarado|azarar|azarara|azare|azaro|azeda|azedada|azedado|azedar|azedara|azede|azedo|doze|lazer|rareza|razao|razoa|razoada|razoado|razoar|razoara|razoe|razoo|realeza|reza|rezada|rezado|rezador|rezao|rezar|rezara|rezarao|reze|rezo|zela|zelada|zelado|zelador|zelar|zelara|zelarao|zele|zelo|zero|zoada|zoado|zoador|zoadora|zoar|zoara|zoarao|zorra|zorro"},{"c":"g","o":"natoeu","w":"agente|agua|ague|aguenta|aguente|aguento|aguo|aguou|auge|egua|engana|engane|engano|enganou|engata|engate|engato|engatou|gaga|gago|gana|gane|ganga|gano|gata|gato|gatuna|gatune|gatuno|gatunou|gene|gente|gongo|gota|goteou|goto|gueto|nega|nego|negou|negue|tanga|tange|tangeu|tango|tangou|tangue|unge"},{"c":"j","o":"rgeoam","w":"amojam|amojar|amojara|amojem|areja|arejam|arejar|arejara|arejo|arroja|arrojam|arrojar|arrojem|arrojo|emerja|emerjam|emerjo|gaja|gajao|gajo|gorjear|jargao|jarra|jarrao|jarro|joga|jogam|jogao|jogar|jogara|jogaram|jogarao|jogarem|jogo|jorra|jorram|jorrar|jorrara|jorre|jorrem|jorro|major|maraja|mareja|marejam|marejar|marejo|reaja|reajam|reajo|reja|rejam|rejo|rojao"},{"c":"j","o":"paloem","w":"almeja|almejam|almejo|aloja|alojam|aloje|alojem|amojam|amojem|eleja|elejam|elejo|laje|lampeja|lampejo|loja|pajem|palmeja|palmejo|peja|pejam|pejo|peleja|pelejam|pelejo"},{"c":"n","o":"mdoeul","w":"doendo|dolmen|donde|dono|duende|dundum|duodeno|eden|emende|emendem|emendo|emendou|lendo|meneou|menu|moendo|monde|mondem|mondo|mondou|mono|mundo|mune|munem|muno|nele|nene|neon|nodo|nodule|nodulem|nodulo|nodulou|nome|nomeou|nono|nulo|onde|ondulem|ondulou|unem"},{"c":"q","o":"nietau","w":"antiqua|antique|aquenta|aquente|aqui|aquieta|aquiete|ataque|ataquei|equina|inquina|inquine|niquei|quanta|quantia|quente|queque|quieta|quietai|quiete|quietei|quina|quinai|quine|quinei|quinta|quintai|quinte|quintei|quita|quitai|quite|quitei|tanque|tique"},{"c":"q","o":"riateu","w":"aqui|aquieta|aquiete|arque|arqueai|arquear|arqueei|arquei|arqueia|arqueie|arqueta|ataque|ataquei|atraque|quarta|queira|queque|quer|querei|querer|querera|queria|quieta|quietai|quietar|quiete|quietei|quita|quitai|quitar|quitara|quite|quitei|requer|requeri|tique|truque"},{"c":"u","o":"dntoec","w":"cedeu|concute|concuto|condute|conduto|conotou|contou|contudo|coou|cotou|coute|couto|coutou|cuco|decotou|denotou|detetou|detonou|doeu|doou|dotou|douto|duende|dueto|duodeno|ecoou|educo|educou|encenou|encetou|enteou|entoou|eunuco|notou|outone|outono|teceu|tendeu|tentou|tenue|tocou|tonteou|toucou|tudo|unte|unto|untou|utente"},{"c":"h","o":"nriafc","w":"acanha|acanhai|acanhar|acha|achai|achar|achara|acharia|ancinha|anicha|anichai|anichar|aninha|aninhai|aninhar|aranha|arranha|cachaca|chacina|chanca|chia|chiai|chiar|chiara|chiaria|chica|chicana|chicha|chichi|chifra|chifrai|chifrar|chinca|chincai|chincar|chirria|cracha|facanha|farinha|ficha|fichai|fichar|fichara|fininha|frincha|incha|inchai|inchar|inchara|ninha|racha|rachai|rachar|rachara|rainha"},{"c":"x","o":"sriafu","w":"afixa|afixai|afixais|afixar|afixara|afixas|asfixia|faixa|faixai|faixais|faixar|faixara|faixas|fixa|fixai|fixais|fixar|fixara|fixaras|fixaria|fixas|fixura|rixa|rixai|rixais|rixar|rixara|rixaras|rixaria|rixas|sufixa|sufixai|sufixar|sufixas"},{"c":"u","o":"vitoel","w":"elevou|evitou|evolui|evoluiu|evoluo|evolveu|leiloou|levitou|levou|loteou|louve|louvei|louvo|louvou|lute|lutei|luto|lutou|ouve|ouvi|ouviu|ovou|titulei|titulo|titulou|tule|uive|uivei|uivo|uivou|util|velou|vetou|violou|viuve|viuvei|viuvo|viuvou|viveu|volteou|voltou|voluvel|volveu|voou|votou|vulto"},{"c":"j","o":"nietoa","w":"ajanota|ajanote|ajanoto|ajeita|ajeitai|ajeite|ajeitei|ajeito|anjo|anojai|anojei|atinja|atinjo|enjeita|enjeite|enjeito|enjoa|enjoai|enjoe|enjoei|enjoo|enojai|enojei|injeta|injetai|injete|injetei|injeto|janota|janotai|janote|janotei|janoto|janta|jantai|jante|jantei|janto|jato|jeito|joanete|joanino|joia|joio|jota|nojenta|nojento|nojo|tanja|tanjo|tinja|tinjo|tojo"},{"c":"c","o":"psreum","w":"cerre|cerrem|cerres|cesse|cessem|cesses|ceus|creem|creme|cremem|cremes|crepe|crepes|crer|crerem|creres|cres|cresce|crescem|crescer|cresces|cresceu|cresse|cressem|cresses|creu|crus|cume|cumes|cumpre|cumprem|cumpres|cure|curem|cures|curse|cursem|curses|cuspe|escuse|escusem|escuses|merce|merece|merecem|merecer|mereces|mereceu|perece|perecem|perecer|pereces|pereceu|prece|preces|recem|recue|recuem|recues|recuse|recusem|recuses|secs"},{"c":"d","o":"bnioeu","w":"bebedo|bebendo|bebido|beduino|bide|bode|bonde|dedo|diodo|doei|doendo|doeu|doido|donde|dono|doou|dubio|duende|duodeno|eden|endoide|endoido|idoneo|indio|indo|inibido|inunde|inundei|inundo|inundou|iodo|nodo|odeie|odeio|odiei|odio|odiou|onde|unido|unindo"},{"c":"b","o":"msieul","w":"bebe|bebei|bebeis|bebem|bebes|bebesse|bebeu|bebi|bebieis|bilis|bule|bulei|buleis|bulem|bules|buli|bulieis|bulis|bulisse|buliu|bumbum|busilis|embebe|embebei|embebem|embebes|embebeu|embebi|embleme|ibis|ilibe|ilibei|ilibem|ilibes|imbuem|imbui|imbuis|imbuiu|sebe|sebes|sibile|sibilei|sibilem|sibiles|subi|subieis|subis|subisse|subiu|sublime|subsume|subsumi"},{"c":"d","o":"sioful","w":"dilui|diluido|diluis|diluiu|diluo|diodo|diodos|disso|doido|doidos|dois|dolo|doloso|dolosos|doou|doso|fluido|fluidos|idolo|idolos|idos|idoso|idosos|iludi|iludido|iludis|iludiu|iludo|iodo|lido|lidos|lidou|lodo|lodos|lodoso|lodosos|ludo|odio|odios|odioso|odiosos|odiou|ossudo|ossudos|sido|sidos|sodio|soldo|soldos|soldou|solido|solidos|solidou"},{"c":"j","o":"dsiaeu","w":"adeja|adejada|adejai|adejais|adejas|adejei|adejeis|ajuda|ajudada|ajudai|ajudais|ajudas|ajude|ajudei|ajudeis|ajudes|deseja|desejai|desejas|deseje|desejei|jade|jades|jejua|jejuada|jejuai|jejuais|jejuas|jejue|jejuei|jejueis|jejues|judeu|judeus|judia|judiada|judiai|judiais|judias|judie|judiei|judieis|judies|seja|sejais|sejas|suja|sujada|sujadas|sujai|sujais|sujas|sujasse|suje|sujei|sujeis|sujes"},{"c":"q","o":"nszieu","w":"esqui|esquie|esquiei|esquies|esquine|esquis|inquine|isque|isquei|isqueis|isques|niquei|niqueis|queque|quine|quinei|quines|quinze|quinzes|quis|seque|sequei|sequeis|seques|sique|siques|uisque|uisques|zinque|zinquei|zinques"},{"c":"u","o":"vsiaef","w":"efusiva|esvaiu|fusa|fusas|saiu|seus|suai|suais|suas|suasse|suasses|suava|suavas|suave|suaveis|suaves|suei|sueis|sues|sueva|uiva|uivai|uivais|uivas|uivasse|uivava|uivavas|uive|uivei|uiveis|uives|usai|usais|usas|usasse|usasses|usava|usavas|usaveis|usei|useis|uses|usuais|uvas|veus|visuais|viuva|viuvai|viuvais|viuvas|viuvava|viuve|viuvei|viuveis|viuves|viveu"},{"c":"h","o":"diaecl","w":"acha|achada|achai|ache|achei|alhada|alheada|alheai|alheei|alheia|alheie|cachaca|cache|cacheai|cacheei|cacheia|calha|calhada|calhai|calhe|calhei|cedilha|cedilhe|celha|chacal|chalaca|chalada|chale|checa|cheia|chia|chiada|chiai|chica|chicha|chichi|chie|chiei|chila|cliche|dedilha|dedilhe|helice|ilha|ilhal|ilhe"},{"c":"m","o":"qiecul","w":"ceiem|celeume|ciume|ciumei|ciumem|cliquem|cume|cumule|cumulei|cumulem|eliciem|emulei|emulem|leem|leme|lime|limei|limem|lume|mele|melei|melem|miei|miem|mime|mimei|mimem|mimice|queime|queimei|queimem|quem|ululem"},{"c":"h","o":"pnioam","w":"amanha|amanhai|amanham|amanho|anho|aninha|aninhai|aninham|aninho|apanha|apanhai|apanham|apanho|apinha|apinhai|apinham|apinho|apinhoa|apinhoo|aponha|aponham|aponho|hino|homo|imponha|imponho|manha|minha|moinho|ninha|ninho|oponha|oponham|oponho|paninho|pinha|pinhao|pinho|ponha|ponham|ponho"},{"c":"u","o":"pniacl","w":"alucina|alui|aluia|aluiu|aluna|alunai|anua|anual|anui|anuia|anuiu|anula|anulai|anuncia|apupa|apupai|aula|cacau|cacaual|caiu|calcula|calunia|capicua|culpa|culpai|cupula|inclua|inclui|incluia|incluiu|inculca|inculpa|lacuna|lula|lupa|nuca|nula|nunca|nupcial|pilula|pula|pulai|pulula|pululai|puna|puni|punia|punica|puniu|pupila|ululai|unia|unica|uniu"},{"c":"i","o":"sgofum","w":"figo|figos|fios|fiou|fisgo|fisgou|fugi|fugimos|fugis|fugiu|guio|guiou|guiso|guisou|imos|isso|migo|migou|mimo|mimos|mimoso|mimosos|mimou|miou|missou|mugi|mugimos|mugis|mugiu|omisso|omissos|sigo|sigui|simios|sofismo|sois|sufismo|sumi|sumimos|sumis|sumiu"},{"c":"j","o":"nsiaem","w":"enseja|ensejai|ensejam|ensejas|ensejei|jamais|maneja|manejai|manejam|manejas|manejei|manja|manjai|manjais|manjam|manjas|manje|manjei|manjeis|manjem|manjes|massaja|massaje|mija|mijai|mijais|mijam|mijas|mijasse|mije|mijei|mijeis|mijem|mijes|seja|sejais|sejam|sejas"}],"hard":[{"c":"s","o":"rieful","w":"eles|erreis|erres|esfrie|esfriei|esfries|esse|esses|feireis|feires|feres|ferieis|feries|ferires|feris|ferisse|ferreis|ferres|fies|fileis|files|filieis|filies|fissil|fluieis|fluires|fluis|fluisse|freires|freis|frese|fresei|freseis|freses|frise|frisei|friseis|frises|fruieis|fruires|fruis|fruisse|fureis|fures|ieis|ireis|ires|irieis|iris|irise|irisei|iriseis|irises|leis|lereis|leres|lese|lesei|leseis|leses|lesse|lesseis|lesses|lufeis|lufes|referes|referis|refieis|refies|refiles|refluis|releis|releres|reles|relesse|resfrie|ressele|reus|reuse|reusei|reuseis|reuses|rifeis|rifes|rireis|rires|ririeis|risse|risseis|risses|rufeis|rufes|rufieis|rufies|ruieis|ruireis|ruires|ruis|ruisse|ruisses|seis|sele|selei|seleis|seles|serei|sereis|seres|serie|seriei|serieis|series|serre|serrei|serreis|serres|sesseis|sessil|seus|sifilis|suei|sueis|sues|sufle|sufles|sulfure|surfe|surre|surrei|surreis|surres|ululeis|ulules|urreis|urres|usei|useis|uses|usufrui"},{"c":"s","o":"rgioum","w":"giros|gomos|gomoso|gorros|griso|grisou|grosso|grossos|grous|guiso|guisou|gurus|imos|iris|iriso|irisou|irmos|iroso|isso|mimos|mimoso|mimosos|missou|moiros|moroso|morros|mossou|mouros|mugimos|mugis|muros|murros|musgo|musgos|musgoso|oiros|omisso|omissos|osso|ossos|ouros|ouso|ousou|rimos|rirmos|riso|risos|rissois|rogos|rois|rugis|rugoso|rugosos|ruimos|ruirmos|ruis|rumos|russo|russos|sigo|sigui|simios|sirio|sirios|sogro|sogros|sois|somo|somos|somou|soou|soro|soror|soros|soroso|sorri|sorrio|sorrir|sorris|sorriso|sorriu|sugiro|sugo|sugou|sumi|sumimos|sumir|sumis|sumiu|sumo|sumoso|suor|suou|surgi|surgir|surgis|surgiu|surro|surrou|urgimos|urgis|urros|urso|ursos|usos|usou"},{"c":"j","o":"sriaeu","w":"areja|arejai|arejais|arejar|arejara|arejas|arejei|arejeis|erija|erijais|erijas|jarra|jarras|jejua|jejuai|jejuais|jejuar|jejuara|jejuas|jejue|jejuei|jejueis|jejues|jura|jurai|jurais|jurar|jurara|juraras|jurarei|jurares|juraria|juras|jurasse|jure|jurei|jureis|jures|juri|juris|reaja|reajais|reajas|reja|rejais|rejas|rejura|rejurai|rejurar|rejuras|rejure|rejurei|rija|rijas|ruja|rujais|rujas|sarja|sarjai|sarjais|sarjar|sarjara|sarjas|sarje|sarjei|sarjeis|sarjes|seja|sejais|sejas|suja|sujai|sujais|sujar|sujara|sujaras|sujarei|sujares|sujaria|sujas|sujasse|suje|sujei|sujeira|sujeis|sujes|surja|surjais|surjas|urjais"},{"c":"n","o":"riejaf","w":"afana|afanai|afanar|afanara|afane|afanei|afina|afinai|afinar|afinara|afine|afinei|arena|ariana|arranja|arranje|enfeai|enfear|enfeara|enfeia|enfeie|enfiai|enfiar|enfiara|enfiei|enrija|enrijai|enrijar|enrije|enrijei|faina|fana|fanai|fanar|fanara|fanarei|fanaria|fane|fanei|fina|finai|finar|finara|finarei|finaria|fine|finei|finja|franja|franjai|franjar|franje|franjei|frena|frenai|frenar|frenara|frene|frenei|iene|infere|inferi|inferia|inferir|inferna|inferne|infira|nana|nanai|nanar|nanara|nanarei|nanaria|nane|nanei|narina|narra|narrai|narrar|narrara|narre|narrei|nene|nina|ninai|ninara|ninarei|ninaria|nine|ninfa|raiana|ranja|refina|refinai|refinar|refine|refinei|reina|reinai|reinar|reinara|reine|reinei|rena|renina"},{"c":"l","o":"nratec","w":"acalca|acalcar|acalce|acelera|acelere|aclara|aclarar|aclare|alar|alara|alca|alcanca|alcance|alcar|alcara|alcatra|alce|alenta|alentar|alente|alerta|alertar|alerte|alta|altar|altear|alteara|alter|altera|alterar|altere|alterna|alterne|anal|anel|anela|anelar|anelara|anele|antenal|areal|atleta|atrela|atrelar|atrele|cala|calar|calara|calca|calcar|calcara|calce|calceta|calcete|cale|canal|cancela|cancele|canela|canelar|canele|carnal|cartel|cartela|cela|celere|celta|centeal|central|cereal|clara|clarear|enlaca|enlacar|enlace|enlata|enlatar|enlate|entala|entalar|entale|eternal|laca|lacar|lacara|lace|lacear|laceara|lacera|lacerar|lacere|lacete|lacra|lacrar|lacrara|lacre|lacrear|lacta|lactara|lactea|lanar|lanca|lancar|lancara|lance|lancear|lanceta|lancete|lata|late|latente|lateral|lena|lenta|lentar|lente|lera|letal|letra|natal|nela|nele|rala|ralar|ralara|rale|ralear|raleara|realca|realcar|realce|recalca|rela|relanca|relance|relata|relatar|relate|rele|reler|relera|renal|retal|tala|talar|talara|tale|teatral|tecla|teclar|tecle|tela|tele|trela"},{"c":"d","o":"setaum","w":"adamada|adeus|adeusa|adeusas|adeuse|adeusem|adeuses|amada|amadas|ameada|ameadas|amuada|amuadas|asada|asadas|assada|assadas|asseada|asseda|assedam|assedas|assede|assedem|assedes|atada|atadas|ataude|ateada|ateadas|atuada|atuadas|autuada|dada|dadas|dama|data|datada|datadas|datam|datas|datasse|dataste|date|datem|dates|dedada|deem|desata|desatam|desatas|desate|desatem|desates|desde|desdem|desmama|desmame|desse|dessem|desses|deste|destes|desusa|desusam|desusas|desuse|desusem|desuses|detem|detesta|deteste|deteta|detetam|detetas|detete|detetem|detetes|deusa|deusas|deuses|duas|duma|dumas|edema|edemas|estada|estadas|estuda|estudam|estudas|estude|estudem|estudes|madama|mamada|mamadas|mamuda|mamudas|massuda|matada|matadas|meada|meadas|medas|mede|medem|medes|medusa|medusas|mesada|mesadas|metade|metades|muda|mudada|mudadas|mudam|mudas|mudasse|mudaste|mude|mudem|mudes|mutuada|sauda|saudada|saudade|saudam|saudas|saude|saudem|saudes|seda|sedada|sedadas|sedam|sedas|sedasse|sedaste|sede|sedem|sedes|semeada|suada|suadas|sudeste|sustada|tateada|tatuada|testada|usada|usadas"},{"c":"f","o":"psraou","w":"afara|afarao|afaras|afofa|afofar|afofara|afofas|afofo|afofou|afora|aforar|aforara|aforas|aforo|aforou|aforra|aforrar|aforras|aforro|aforros|aforrou|afro|arfa|arfar|arfara|arfarao|arfaras|arfas|arfo|arfou|arrufa|arrufar|arrufas|arrufo|arrufos|arrufou|fara|faras|farofa|farofas|faros|farpa|farpao|farpara|farpo|farra|farrapa|farrapo|farras|farsa|farsas|fofa|fofas|fofo|fofos|fora|foras|foro|foros|forra|forrar|forrara|forras|forro|forros|forrou|fosfora|fosforo|fossa|fossar|fossara|fossas|fosso|frua|fruas|fruo|fura|furao|furar|furara|furarao|furaras|furas|furo|furor|furos|furou|fusa|fusao|fusas|fuso|fusos|orfao|orfaos|orfas|profs|profusa|profuso|rafa|rafar|rafara|rafarao|rafaras|rafas|rafo|rafou|rufa|rufar|rufara|rufarao|rufaras|rufas|rufo|rufou|safa|safar|safara|safarao|safaras|safas|safo|safos|safou|safra|safras|sofa|sofas|sofra|sofras|sofro|usufrua|usufruo"},{"c":"i","o":"gtoafu","w":"afagai|afia|afiai|afifa|afifai|afifo|afifou|afio|afiou|afofai|afogai|afoita|afoitai|afoito|afoitou|agaiata|agaiato|agia|agiota|agiotai|agioto|agiotou|agita|agitai|agito|agitou|agiu|aguai|aguia|atai|atia|atuai|autuai|faia|fatia|fatiai|fatiga|fatigai|fatigo|fatigou|fatio|fatiota|fatiou|fiai|figa|figo|fiou|fita|fitai|fito|fitou|fugi|fugia|fugiu|gaita|giga|guia|guiai|guiao|guio|guiou|guita|ioga|oito|tatuai|tifo|tita|tufai"},{"c":"s","o":"riecul","w":"celeres|cerreis|cerres|cesse|cessei|cesseis|cesses|ceus|cise|cisei|ciseis|cises|crereis|creres|cres|cresce|crescei|crescer|cresces|cresceu|cresci|cresse|cresses|crieis|cries|crise|crises|crueis|crus|cureis|cures|curse|cursei|curseis|curses|eles|elicies|erreis|erres|escuse|escusei|escuses|esse|esses|ieis|ireis|ires|irieis|iris|irise|irisei|iriseis|irises|leis|lereis|leres|lese|lesei|leseis|leses|lesse|lesseis|lesses|liceus|lucreis|lucres|receeis|receies|recries|recueis|recues|recuse|recusei|recuses|releis|releres|reles|relesse|ressele|reus|reuse|reusei|reuseis|reuses|rireis|rires|ririeis|risse|risseis|risses|ruieis|ruireis|ruires|ruis|ruisse|ruisses|secs|seis|sele|selei|seleis|seles|serei|sereis|seres|serie|seriei|serieis|series|serre|serrei|serreis|serres|sesseis|sessil|seus|suei|sueis|sues|surre|surrei|surreis|surres|ulceres|ululeis|ulules|urreis|urres|usei|useis|uses"},{"c":"b","o":"itoacm","w":"abaco|abata|abatam|abatata|abatato|abati|abatia|abatiam|abato|aboba|abobai|abobam|abotoa|abotoai|abotoam|abotoo|acaba|acabai|acabam|acabo|ambicao|ambito|amiba|atomba|atombai|atombam|atombo|baba|babai|babam|babao|babo|baca|bacia|bacio|bacoca|bacoco|bamba|bambo|bata|batam|batata|bati|batia|batiam|bato|batom|batota|batotai|batotam|batoto|bica|bicai|bicam|bico|bimba|biombo|biotico|boata|boatai|boatam|boato|boba|bobo|boca|bocaca|bocio|boia|boiam|boiao|boicota|boicoto|boio|bomba|bombo|bombom|bota|botai|botam|botao|botica|botim|boto|cabaca|cabaco|cabia|cabiam|cabo|caiba|caibam|caibo|cambia|cambiai|cambiam|cambio|cambota|coabita|coabito|cobaia|cobaio|cobica|cobicai|cobicam|cobico|coiba|coibam|coibi|coibia|coibiam|coibo|combata|combati|combato|comboio|imbicai|imbicam|imbico|mambo|obito|tabaco|tibia|tomba|tombai|tombam|tombo"},{"c":"b","o":"dneoam","w":"abade|abana|abanada|abanado|abanam|abanao|abane|abanem|abano|abdomen|aboba|abobada|abobado|abobam|abobem|abonada|abonado|abonam|abonem|adobe|ameba|baba|babada|babado|babam|babando|babao|babe|babem|babo|babona|badana|badanam|badane|badanem|badano|bamba|bambo|bana|banam|banana|banda|bando|bane|banem|bano|beba|bebada|bebado|bebam|bebe|bebeda|bebedo|bebem|bebendo|bebo|boba|bobeada|bobeado|bobo|boda|bode|bomba|bombada|bombo|bombom|bondade|bonde|bone|debanda|debande|debando|ebano|embeba|embebam|embebe|embebem|embebo|mambo|nabo|oboe"},{"c":"p","o":"brtoau","w":"abrupta|abrupto|apara|aparar|aparara|aparato|aparo|aparou|aparta|apartar|aparto|apartou|apor|apora|aporao|aporta|aportar|aporto|aportou|aproar|aproara|aproou|apta|apto|apupa|apupar|apupara|apupo|apupou|apura|apurar|apurara|apuro|apurou|arpa|arpao|arpar|arpara|arparao|arpo|arpoar|arpoara|arpoou|atropa|atropar|atropo|atropou|opor|opora|oporao|opta|optar|optara|optarao|opto|optou|papa|papao|papar|papara|papo|papou|parar|parara|pararao|paro|parou|parra|parta|parto|pata|patao|pauta|pautar|pautara|pauto|pautou|popa|popo|pora|porao|poro|porra|porro|porta|portao|portar|portara|portou|potra|potro|poupa|poupar|poupara|poupo|poupou|prata|prato|proa|propor|propora|protao|pura|puro|purpura|puto|rapa|rapar|rapara|raparao|rapo|rapou|rapta|raptar|raptara|rapto|raptor|raptora|raptou|roupa|roupao|tapa|tapar|tapara|taparao|tapo|tapou|topa|topar|topara|toparao|topo|topou|torpor|trapo|tropa"},{"c":"m","o":"pgeoal","w":"agem|alagam|alam|alamo|alegam|alem|alemao|algema|algemam|algeme|algemem|algemo|alma|amago|amam|amem|amola|amolam|amole|amolem|amolga|amolgam|amolgo|amolo|ampla|amplo|ampola|apagam|apalma|apalmam|apalme|apalmem|apalmo|apalpam|apalpem|apegam|apelam|apelem|apoem|elegem|elmo|empapa|empapam|empape|empapem|empapo|empoa|empoam|empola|empolam|empole|empolem|empolga|empolgo|empolo|galam|galem|galgam|galopam|galopem|gama|gamam|gamao|game|gamem|gamo|gelam|gelem|gema|gemam|geme|gemea|gemem|gemeo|gemo|goelam|goelem|goma|gomo|lama|lamela|lamelam|lamele|lamelem|lamelo|leem|legam|lema|leme|maga|magma|mago|magoa|magoam|magoe|magoem|magoo|mala|malga|mama|mamae|mamal|mamam|mamao|mame|mamem|mamo|mapa|mela|melam|melao|mele|melem|melga|meloa|meloal|moagem|moam|moela|moem|mola|mole|olmo|omega|opoem|pagam|palma|palmam|palme|palmem|palmo|palpam|palpem|papam|papem|pegam|pelagem|pelam|pelem|poem|poema|pomo|pompa|pompom"},{"c":"u","o":"riaoel","w":"aleluia|aliou|aloura|alourai|alourar|alourei|alouro|alourou|aluara|aluarao|aluarei|aluaria|alui|aluia|aluir|aluira|aluirao|aluirei|aluiria|aluiu|areou|arou|arreou|arriou|arroiou|arrolou|arruai|arruar|arruara|arruei|arruou|aula|aura|aurea|aureo|aureola|aureole|aureolo|aurora|aurorai|auroral|aurorar|aurore|aurorei|auroro|aurorou|errou|euro|irou|laureai|laurear|laureei|laureia|laureie|laureio|laureou|leiloou|loirou|loura|lourai|lourar|lourara|loure|lourei|louro|lourou|luar|lula|lura|orlou|orou|oura|ouro|raiou|raleou|ralou|rareou|releu|roeu|rolou|ruela|ruia|ruir|ruira|ruirao|ruirei|ruiria|ruiu|rural|ululai|ulular|ululara|ureia|urra|urrai|urrar|urrara|urrarao|urrarei|urraria|urre|urrei|urro|urrou"},{"c":"u","o":"nsitac","w":"acusa|acusai|acusais|acusas|anua|anuais|anuas|anui|anuia|anuias|anuis|anuiu|anuncia|anus|assusta|astucia|astuta|astutas|atua|atuai|atuais|atuas|atuns|autista|autua|autuai|autuais|autuas|cacatua|cacau|caiu|casuais|catatua|causa|causai|causais|causas|cicuta|custa|custai|custais|custas|incauta|incuta|incutas|incuti|incutia|incutis|incutiu|insinua|intua|intuais|intuas|intui|intuia|intuias|intuis|intuiu|naus|nautica|nuas|nuca|nunca|nuns|saiu|sauna|saunas|situa|situai|situais|situas|suai|suais|suas|sucata|sucatas|sucinta|suicas|suina|suinas|sunita|sunitas|suscita|susta|sustai|sustais|sustas|sutia|sutias|tatu|tatua|tatuai|tatuais|tatuas|tatus|tiniu|tuas|tuna|tunas|tunica|tunicas|tussa|tussas|unais|unas|unia|unias|unica|unicas|unis|uniu|unta|untai|untais|untas|usai|usais|usas|usinas|usuais"},{"c":"u","o":"mdiael","w":"adiu|aduela|adulada|adulai|adulam|adulei|adulem|alaude|aleluia|almude|aluada|aluam|aluda|aludam|alude|aludem|aludi|aludia|aludiam|aludida|aludiu|aluem|alui|aluia|aluiam|aluida|aluiu|alumia|alumiai|alumiam|alumie|alumiei|alumiem|amiuda|amiudai|amiudam|amiude|amiudei|amiudem|amua|amuada|amuai|amuam|amue|amuei|amuem|amumia|amumiai|amumiam|amumie|amumiei|amumiem|aula|demula|demulam|dilua|diluam|diluem|dilui|diluia|diluiam|diluida|diluiu|dual|duma|elidiu|eluda|eludam|elude|eludem|eludi|eludia|eludiam|eludida|eludiu|emulada|emulai|emulam|emulei|emulem|iluda|iludam|ilude|iludem|iludi|iludia|iludiam|iludida|iludiu|lula|lume|mamuda|mediu|medium|medula|miuda|muda|mudada|mudai|mudam|mude|mudei|mudem|mula|mulada|mumia|ululada|ululai|ululem"},{"c":"n","o":"riahel","w":"aliena|alienai|alienar|aliene|alienei|alinea|alinha|alinhai|alinhar|alinhe|alinhei|anal|anel|anela|anelai|anelar|anelara|anele|anelei|anil|anila|anilar|anilara|anile|anilei|anilha|anilhai|anilhar|anilhe|anilhei|anilina|aniline|aninha|aninhai|aninhar|aninhe|aninhei|aranha|arena|ariana|arranha|arranhe|hernia|hernial|hiena|iene|inalai|inalar|inalara|inalei|lanar|lena|lenha|linear|linha|nana|nanai|nanar|nanara|nanarei|nanaria|nane|nanei|narina|narra|narrai|narrar|narrara|narre|narrei|nela|nele|nene|nina|ninai|ninara|ninarei|ninaria|nine|ninha|raiana|rainha|reina|reinai|reinar|reinara|reine|reinei|rena|renal|renina"},{"c":"b","o":"raexum","w":"aberra|aberram|aberrar|aberre|aberrem|abra|abram|abre|abrem|ambar|ameba|arabe|baba|babam|babar|babara|babaram|babarem|babe|babem|bamba|bambu|barba|barbam|barbar|barbe|barbear|barbem|barra|barram|barrar|barrara|barre|barrem|beba|bebam|bebe|bebem|beber|bebera|beberam|beberar|bebere|beberem|bebeu|berbera|berbere|berma|berra|berram|berrar|berrara|berre|berrem|bramam|bramar|bramara|brame|bramem|brear|breara|brearam|brearem|breu|bruma|bruxa|bruxam|bruxar|bruxara|bruxe|bruxem|bumba|bumbum|burra|embarra|embarre|embeba|embebam|embebe|embebem|embeber|embebeu|embruma|embrume|embruxa|embruxe|exubera|exubere|maubere|rabear|rabeara|reabra|reabram|reabre|reabrem|rubra|urbe|urubu"},{"c":"s","o":"aojefl","w":"afofas|afolas|afoles|alas|alasse|alasses|ales|alojas|alojes|asas|asasse|asasses|ases|assa|assas|assasse|asse|asses|asso|assoa|assoas|assoe|assola|assolas|assole|assoles|assolo|assoo|elas|elejas|eles|elos|esfalfa|esfalfe|esfalfo|esfola|esfolas|esfole|esfoles|esfolo|essa|essas|esse|esses|falas|falasse|fales|falos|falsa|falsas|falso|falsos|fase|fases|fofas|fofos|foles|fossa|fossas|fosse|fosses|fosso|lassa|lassas|lasso|leoas|leoes|lesa|lesao|lesas|lesasse|lese|leses|leso|lesoes|lesse|lesses|lojas|oleasse|oleos|oleosa|oleosas|oleoso|oleosos|ossea|osseas|osseo|osseos|osso|ossos|safa|safas|safasse|safe|safes|safo|safoes|safos|sala|salao|salas|saloes|salsa|salsas|seja|sejas|sela|selas|selasse|sele|seles|selo|selos|sessao|sessoes|soas|soasse|soasses|soes|sofa|sofas|soja|sola|solas|solfeja|solfejo|solo|solos"},{"c":"i","o":"rgtoeu","w":"egregio|eito|erguei|ergui|erige|erigi|erigir|erigiu|errei|gerei|geri|gerir|gerirei|geriu|gire|girei|giro|girou|gorei|goteei|goteie|goteio|grei|gretei|grite|gritei|grito|gritou|guie|guiei|guio|guiou|iogurte|irei|irou|irrigo|irrigou|irrigue|irrite|irritei|irrito|irritou|iterei|iterou|oiro|oito|orei|outeiro|regei|regerei|regi|regie|regire|regirei|regiro|regirou|regrei|reguei|reitere|reitero|reitor|reterei|retire|retirei|retiro|retirou|retroei|rigor|rirei|rito|roei|roerei|roguei|rotei|roteiro|rugi|rugir|rugirei|rugiu|ruir|ruirei|ruiu|terei|tigre|tire|tirei|tirite|tiritei|tirito|tiritou|tiro|tirou|toiro|torei|trie|triei|trigo|trio|triou|triture|troei|troteei|trotei|troteie|troteio|urgir|urgirei|urgiu|urrei|urtigo|urtigou|urtigue"},{"c":"p","o":"nsioec","w":"cepo|cepos|cipo|cipos|copie|copiei|copieis|copies|copio|copioso|copo|copos|cospe|cospes|ensope|ensopei|ensopes|ensopo|epico|epicos|escopo|escopos|especie|especo|espesse|espesso|espie|espiei|espieis|espies|espio|espioes|espione|espiono|espose|esposei|esposes|esposo|esposos|opcoes|opie|opiei|opieis|opies|opine|opinei|opineis|opines|opino|opio|opoe|opoes|opos|peco|pence|pene|penei|peneis|penes|peni|penico|penicos|penis|peno|penoso|penosos|pense|pensei|penseis|penses|pensis|penso|pensoes|pensos|peoes|pepinos|pesco|pescoco|pese|pesei|peseis|peses|peso|pesos|pico|picos|piei|pies|pinceis|pino|pinos|pioes|pisco|piscos|pise|pisei|piseis|pises|piso|pisos|poco|pocoes|pocos|poes|pois|poise|poisei|poiseis|poises|poisio|poisios|poiso|poisos|ponei|poneis|popo|popos|pose|posei|poseis|poses|poso|pospoe|pospoes|pospos|posse|posses|posso|psicose|sincope|sinopse"},{"c":"d","o":"izojau","w":"adia|adiada|adiado|adiai|adida|adido|adio|adiou|adiu|adoida|adoidai|adoido|adoidou|aduzia|aduzida|aduzido|aduziu|ajuda|ajudada|ajudado|ajudai|ajudo|ajudou|audaz|audio|dada|dado|diodo|dizia|doada|doado|doai|doia|doida|doido|dojo|doou|duzia|iodada|iodado|iodo|jazida|jazido|judaiza|judaizo|judia|judiada|judiado|judiai|judio|judiou|judo|odiada|odiado|odiai|odio|odiou|zoada|zoado"},{"c":"d","o":"qitoau","w":"adia|adiada|adiado|adiai|adida|adido|adio|adiou|adita|aditada|aditado|aditai|adito|aditou|adiu|adoida|adoidai|adoido|adoidou|adotada|adotado|adotai|adotou|atada|atado|atida|atido|atuada|atuado|audio|audita|auditai|audito|autuada|autuado|dada|dado|daqui|data|datada|datado|datai|dato|datou|didata|diodo|dita|ditada|ditado|ditai|dito|ditou|doada|doado|doai|doia|doida|doido|doou|dota|dotada|dotado|dotai|doto|dotou|douta|douto|idiota|idiotia|iodada|iodado|iodato|iodo|odiada|odiado|odiai|odio|odiou|quitada|quitado|tatuada|tatuado|tida|tido|toada|toado|toda|todo|tudo"},{"c":"p","o":"sigoeu","w":"espesse|espesso|espie|espiei|espieis|espies|espigo|espigou|espigue|espio|espioes|espiou|espose|esposei|esposes|esposo|esposos|esposou|opie|opiei|opieis|opies|opio|opiou|opoe|opoes|opos|opus|pego|pegou|pegue|peguei|pegueis|pegues|peoes|pese|pesei|peseis|peses|peso|pesos|pesou|pessego|piei|pies|pioes|piou|pise|pisei|piseis|pises|pisgo|pisgou|pisgue|pisguei|pisgues|piso|pisos|pisou|poes|pois|poise|poisei|poiseis|poises|poisio|poisios|poiso|poisos|poisou|popo|popos|pose|posei|poseis|poses|poso|posou|pospoe|pospoes|pospos|pospus|posse|posses|posso|possui|possuis|possuiu|possuo|poupe|poupei|poupeis|poupes|poupo|poupou|pouse|pousei|pouseis|pouses|pousio|pousios|pouso|pousos|pousou|pusesse|supoe|supoes|supos|supus"},{"c":"n","o":"siaful","w":"afana|afanai|afanais|afanas|afina|afinai|afinais|afinal|afinas|afins|afunila|aluna|alunai|alunais|alunas|anal|analisa|ananas|anas|anil|anila|anilais|anilas|anilina|anis|anisa|anisai|anisais|anisas|ansa|ansas|ansia|ansiai|ansiais|ansias|anua|anuais|anual|anuas|anui|anuia|anuias|anuis|anuiu|anula|anulai|anulais|anulas|anus|asna|asnal|asnas|assina|assinai|assinas|faina|fana|fanai|fanais|fanas|fauna|faunas|fina|finai|finais|final|finas|fins|fulana|fulanas|funil|funis|inalai|inalais|inalas|influa|influas|influi|influia|influis|influiu|insana|insanas|insinua|insufla|insula|insulai|insulas|linfa|nana|nanai|nanais|nanas|nasais|nasal|nasala|naus|nina|ninai|ninais|ninas|ninfa|ninfas|nuas|nula|nulas|nuns|salina|salinas|sana|sanai|sanais|sanas|sauna|saunas|sina|sinais|sinal|sinas|suina|suinas|unais|unas|unia|unias|unis|uniu|usinas"},{"c":"h","o":"mreoal","w":"alhear|alheara|alho|amealha|amealhe|amealho|arrolha|arrolhe|arrolho|halo|harem|hera|homem|homo|hora|horror|malha|malham|malhao|malhar|malhara|malhe|malhem|malho|mealha|melhor|melhora|melhore|melhoro|molha|molham|molhar|molhara|molhe|molhem|molho|olha|olhal|olham|olhar|olhara|olharam|olharao|olharem|olhe|olhem|olho|orelha|orelhao|ralha|ralham|ralhao|ralhar|ralhara|ralhe|ralhem|ralho|ramalha|ramalhe|rolha|rolham|rolhar|rolhara|rolhe|rolhem|rolho"},{"c":"n","o":"rgihau","w":"angaria|angina|aninha|aninhai|aninhar|anua|anui|anuia|anuir|anuira|anuiria|anuiu|aranha|ariana|arranha|arruina|gana|ganga|ganha|ganhai|ganhar|ganhara|gani|ganir|ganira|ganiria|ganiu|ginga|gingai|gingar|gingara|grainha|grana|granai|granar|granara|gringa|grunha|grunhi|grunhia|grunhir|grunhiu|guarana|guarani|guina|guinai|guinar|guinara|hangar|huna|iguana|ingira|nana|nanai|nanar|nanara|nanaria|narina|narra|narrai|narrar|narrara|nina|ninai|ninara|ninaria|ninha|raiana|rainha|rangi|rangia|ranhura|ruina|unaria|ungi|ungia|ungir|ungira|ungiria|ungiu|unha|unia|unir|unira|uniria|uniu|urina|urinai|urinar|urinara|urna"},{"c":"n","o":"riaoel","w":"aliena|alienai|alienar|aliene|alienei|alieno|alinea|anal|anao|anel|anela|anelai|anelar|anelara|anele|anelei|anelo|aniao|anil|anila|anilar|anilara|anile|anilei|anilina|aniline|anilino|anilo|arena|ariana|ariano|enrola|enrolai|enrolar|enrole|enrolei|enrolo|erronea|erroneo|iene|inalai|inalar|inalara|inalei|ironia|lanar|lena|leonina|leonino|linear|lona|loreno|nana|nanai|nanar|nanara|nanarao|nanarei|nanaria|nane|nanei|nano|narina|narra|narrai|narrar|narrara|narre|narrei|narro|nela|nele|nene|neon|nina|ninai|ninara|ninarao|ninarei|ninaria|nine|nino|nona|nono|nora|onera|onerai|onerar|onerara|onere|onerei|onero|online|orna|ornai|ornar|ornara|ornarao|ornarei|ornaria|orne|ornei|orno|raiana|raiano|reina|reinai|reinar|reinara|reine|reinei|reino|rena|renal|renina|ronrona|ronrone|ronrono"},{"c":"u","o":"nrioac","w":"acionou|acirrou|acucar|acucara|acucaro|acura|acurai|acurar|acurara|acuro|acurou|ancorou|anua|anuario|anui|anuia|anuir|anuira|anuirao|anuiria|anuiu|anuncia|anuncio|anuo|arcou|arou|arracou|arriou|arroiou|arruaca|arruaco|arruai|arruar|arruara|arrucai|arrucar|arrucou|arruina|arruino|arruou|aura|aurora|aurorai|aurorar|auroro|aurorou|cacau|cacicou|cacoou|cacou|caiou|caiu|cariou|caucao|coou|coroou|corou|coura|couraca|couraco|courao|couro|criou|crua|cuco|cura|curai|curar|curara|curarao|curaria|curiao|curo|curou|curro|incuria|iniciou|inocua|inocuo|irou|nanou|narrou|nuca|nunca|nuncio|orcou|ornou|orou|oura|ouro|raiou|rancou|rocou|roncou|rouca|rouco|ruia|ruina|ruir|ruira|ruirao|ruiria|ruiu|unaria|unario|uncao|unia|uniao|unica|unico|unir|unira|unirao|uniria|uniu|uranio|urina|urinai|urinar|urinara|urino|urinou|urna|urra|urrai|urrar|urrara|urrarao|urraria|urro|urrou"},{"c":"n","o":"itacul","w":"alcanca|alianca|alucina|aluna|alunai|anal|anata|anatai|anca|ancia|anil|anila|anilina|anta|anti|anua|anual|anui|anuia|anuiu|anula|anulai|anuncia|atina|atinai|atinta|atintai|calcina|calunia|cana|canal|canica|canical|canil|canina|canta|cantai|cantata|cantil|cantina|catana|cinica|cinta|cintai|cintila|clinica|inalai|inata|inatual|inca|incauta|incita|incitai|inclina|inclua|inclui|incluia|incluiu|inculca|inculta|incuta|incuti|incutia|incutiu|inicia|iniciai|inicial|intacta|intua|intui|intuia|intuiu|inutil|lacuna|lanca|lancai|lancil|lancina|latina|lituana|nana|nanai|nata|natal|natatil|nautica|nina|ninai|nuca|nula|nunca|tanta|tilinta|tina|tini|tinia|tiniu|tinta|tintina|tuna|tunica|unia|unica|uniu|unta|untai"}]};
+
+const RANKS=[
+{n:'Iniciante',p:0},{n:'Bom Início',p:2},{n:'A Avançar',p:4},{n:'Bom',p:6},
+{n:'Sólido',p:10},{n:'Excelente',p:15},{n:'Brilhante',p:22},{n:'Espetacular',p:30},
+{n:'Génio',p:45},{n:'Rainha Abelha',p:65}
 ];
-function rKan(){var a=document.getElementById("kanA");if(!a)return;var f=gF();var h="";
-kanGroups.forEach(function(grp){var it=f.filter(function(t){return grp.match(t.status)});
-h+='<div class="kcol">';
-h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:3px solid '+grp.color+'"><div style="width:12px;height:12px;border-radius:50%;background:'+grp.color+';flex-shrink:0"></div><span style="font-weight:700;font-size:14px;flex:1">'+grp.name+'</span><span style="font-size:12px;background:'+grp.color+'22;color:'+grp.color+';border-radius:10px;padding:2px 10px;font-weight:700">'+it.length+'</span></div>';
-if(grp.name==="Por iniciar")h+='<input type="text" placeholder="+ Nova tarefa..." onkeydown="if(event.key===\'Enter\'){kanQAdd(this.value);this.value=\'\'}" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--brd);background:var(--card);font-size:13px;outline:none;box-sizing:border-box;margin-bottom:10px">';
-it.forEach(function(t){var od=isOD(t);
-h+='<div class="kcd" style="border-left-color:'+(PC[t.priority]||"#2d6a4f")+';position:relative" draggable="true" ondragstart="kanDragStart(event,\''+t.id+'\')" onclick="eId=\''+t.id+'\';go(\'tasks\',\'\')">';
-h+='<div class="kcd-acts">';
-h+='<button onclick="event.stopPropagation();kanMoveGrp(\''+t.id+'\',-1)" title="← Anterior">◀</button>';
-h+='<button onclick="event.stopPropagation();kanMoveGrp(\''+t.id+'\',1)" title="Avançar →">▶</button>';
-h+='</div>';
-h+='<div style="font-weight:600;font-size:13px;margin-bottom:4px;line-height:1.3;padding-right:40px">'+(t.important?"⭐ ":"")+(od?"⚠️ ":"")+(esc(t.title)||"Sem título")+'</div>';
-h+='<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px">';
-h+='<span style="font-size:9px;padding:2px 7px;border-radius:100px;background:'+(FC[t.status]||"#6b7280")+'22;color:'+(FC[t.status]||"#6b7280")+';font-weight:600">'+t.status+'</span>';
-h+='<span style="font-size:9px;padding:2px 7px;border-radius:100px;background:'+(PC[t.priority]||"#2d6a4f")+'22;color:'+(PC[t.priority]||"#2d6a4f")+';font-weight:600">'+t.priority+'</span>';
-h+='</div>';
-h+='<div style="font-size:10px;color:var(--sub);display:flex;flex-wrap:wrap;gap:4px">';
-if(t.type)h+='<span>'+t.type+'</span>';if(t.client)h+='<span>• '+esc(t.client)+'</span>';if(t.srcLang&&t.tgtLang)h+='<span>• '+t.srcLang+'→'+t.tgtLang+'</span>';h+='</div>';
-if(t.deadline)h+='<div style="font-size:10px;color:'+(od?"#ef4444":"var(--sub)")+';margin-top:4px">📅 '+fD(t.deadline)+'</div>';
-if(t.translator)h+='<div style="font-size:10px;color:var(--sub);margin-top:2px">🧑‍💼 '+esc(t.translator)+'</div>';
-if(t.progress>0&&t.progress<100)h+='<div style="height:4px;background:var(--brd);border-radius:2px;margin-top:6px;overflow:hidden"><div style="height:100%;width:'+t.progress+'%;background:linear-gradient(90deg,#2d6a4f,#10b981);border-radius:2px"></div></div>';
-h+='</div>'});
-h+='<div style="min-height:30px" ondragover="event.preventDefault();this.style.background=\'rgba(45,106,79,0.05)\'" ondragleave="this.style.background=\'none\'" ondrop="kanDropGrp(event,\''+grp.name+'\');this.style.background=\'none\'"></div>';
-h+='</div>'});a.innerHTML=h}
-function kanQAdd(v){if(!v||!v.trim())return;pushTask(mkT({title:v.trim()}),"team")}
-function kanMoveGrp(id,dir){var t=tasks.find(function(x){return x.id===id});if(!t)return;
-var ci=-1;for(var i=0;i<kanGroups.length;i++){if(kanGroups[i].match(t.status)){ci=i;break}}
-var ni=ci+dir;if(ni<0||ni>=kanGroups.length)return;
-var targets={"Por iniciar":"Por iniciar","Em curso":"Em progresso","Em revisão final":"Para enviar","Concluído":"Concluído"};
-t.status=targets[kanGroups[ni].name]||"Por iniciar";if(t.status==="Concluído")t.progress=100;t.updatedAt=new Date().toISOString();saveTask(t)}
-function kanDragStart(e,id){_kanDragId=id;e.dataTransfer.effectAllowed="move"}
-function kanDropGrp(e,grpName){e.preventDefault();if(!_kanDragId)return;
-var targets={"Por iniciar":"Por iniciar","Em curso":"Em progresso","Em revisão final":"Para enviar","Concluído":"Concluído"};
-var t=tasks.find(function(x){return x.id===_kanDragId});if(t){t.status=targets[grpName]||"Por iniciar";if(t.status==="Concluído")t.progress=100;t.updatedAt=new Date().toISOString();saveTask(t)}_kanDragId=null}
-// CALENDAR
-var cMo=new Date().getMonth(),cYr=new Date().getFullYear();
-function rCal(){var a=document.getElementById("calA");if(!a)return;var mn=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];var dim=new Date(cYr,cMo+1,0).getDate();var fd=new Date(cYr,cMo,1).getDay();var adj=fd===0?6:fd-1;var now=new Date();
-var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><button onclick="cMo=(cMo===0?(cYr--,11):cMo-1);rCal()" style="background:var(--brd);border:none;border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--text);font-weight:600">◀</button><span style="font-weight:700;font-size:18px">'+mn[cMo]+" "+cYr+'</span><button onclick="cMo=(cMo===11?(cYr++,0):cMo+1);rCal()" style="background:var(--brd);border:none;border-radius:8px;padding:6px 14px;cursor:pointer;color:var(--text);font-weight:600">▶</button></div><div class="cgrid">';
-["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"].forEach(function(d){h+='<div style="text-align:center;font-weight:700;font-size:11px;color:var(--sub);padding:6px">'+d+'</div>'});
-for(var i=0;i<42;i++){var d=i-adj+1;if(d<1||d>dim){h+='<div class="cd empty"></div>';continue}var ds=cYr+"-"+String(cMo+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");var isT=now.getDate()===d&&now.getMonth()===cMo&&now.getFullYear()===cYr;var dt=tasks.filter(function(t){if(hideDn&&["Concluído","Faturado"].indexOf(t.status)>=0)return false;return t.deadline===ds});h+='<div class="cd'+(isT?" today":"")+'"><div style="font-size:12px;text-align:right;font-weight:'+(isT?"700":"500")+';color:'+(isT?"var(--acc)":"var(--text)")+'">'+d+'</div>';dt.slice(0,3).forEach(function(t){var od=isOD(t);h+='<div class="ct2" style="background:'+(od?"#fef2f2":(FC[t.status]||"#6b7280")+"22")+';color:'+(od?"#ef4444":(FC[t.status]||"#6b7280"))+'" onclick="eId=\''+t.id+'\';go(\'tasks\',\'\')">'+(esc(t.title)||t.type)+'</div>'});if(dt.length>3)h+='<div style="font-size:9px;color:var(--sub)">+'+(dt.length-3)+'</div>';h+='</div>'}h+='</div>';a.innerHTML=h}
-// DASHBOARD
-function rDash(){var a=document.getElementById("dashA");if(!a)return;var ts=hideDn?tasks.filter(function(t){return["Concluído","Faturado"].indexOf(t.status)<0}):tasks;var tot=ts.length,dn=tasks.filter(function(t){return["Concluído","Faturado"].indexOf(t.status)>=0}).length,pr=ts.filter(function(t){return t.status==="Em progresso"}).length,ov=ts.filter(isOD).length,md=ts.filter(function(t){return t.myDay}).length,ap=tot?Math.round(ts.reduce(function(a2,t){return a2+(t.progress||0)},0)/tot):0,cr=tasks.length?Math.round(dn/tasks.length*100):0;
-var bySt={},byTy={};ts.forEach(function(t){bySt[t.status]=(bySt[t.status]||0)+1;byTy[t.type]=(byTy[t.type]||0)+1});
-var sc=function(ic,lb,vl,co,sub,ck){return'<div class="sc" style="border-top:3px solid '+co+'" onclick="'+ck+'"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:20px">'+ic+'</span><span style="font-size:22px;font-weight:800;color:'+co+'">'+vl+'</span></div><div style="font-size:11px;color:var(--sub);font-weight:600;margin-top:4px">'+lb+'</div>'+(sub?'<div style="font-size:10px;color:var(--sub);margin-top:2px">'+sub+'</div>':'')+'</div>'};
-var bar=function(data,mx,fn,cv){return data.map(function(d){var cl=cv?"cursor:pointer\" onclick=\"go('"+cv+"','"+encodeURIComponent(d[0])+"')":"";return'<div style="margin-bottom:6px;'+cl+'"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px"><span>'+d[0]+'</span><span style="font-weight:700">'+d[1]+'</span></div><div style="height:7px;background:var(--brd);border-radius:4px;overflow:hidden"><div style="height:100%;width:'+Math.round(d[1]/mx*100)+"%;background:"+(fn?fn(d[0]):"#2d6a4f")+';border-radius:4px"></div></div></div>'}).join("")};
-var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2>📈 Dashboard</h2><span style="font-size:11px;color:var(--sub)">'+new Date().toLocaleString("pt-PT")+'</span></div>';
-h+='<div class="sgrid">';
-h+=sc("📋","Total",tot,"#2d6a4f","","go('tasks','')");h+=sc("🔄","Em Progresso",pr,"#d97706","","go('bystatus','Em%20progresso')");h+=sc("✅","Concluídas",dn,"#22c55e",cr+"% concluído","go('bystatus','Conclu%C3%ADdo')");h+=sc("⚠️","Atrasadas",ov,"#ef4444","","go('overdue','')");h+=sc("☀️","Meu Dia",md,"#eab308","","go('myday','')");h+=sc("📊","Progresso",ap+"%","#8b5cf6","","go('tasks','')");
-h+='</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div class="db"><h3>Por Estado</h3>'+bar(Object.entries(bySt),tot||1,function(k){return FC[k]||"#2d6a4f"},"bystatus")+'</div><div class="db"><h3>Por Tipo</h3>'+bar(Object.entries(byTy).sort(function(a2,b){return b[1]-a2[1]}).slice(0,8),tot||1,null,"bytype")+'</div></div>';
-a.innerHTML=h}
-// EXPORT/IMPORT
-function expJ(){var b=new Blob([JSON.stringify(tasks,null,2)],{type:"application/json"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="delta-lingua-tarefas-"+td()+".json";a.click()}
-function cvT(t){var sm={"pending":"Por iniciar","in_progress":"Em progresso","completed":"Concluído","review":"Em revisão","translated":"Traduzido","reviewed":"Revisto","sent":"Enviado","invoiced":"Faturado","to_send":"Para enviar"};var pm={"low":"Baixa","medium":"Normal","high":"Alta","urgent":"Urgente"};var st=t.status?(sm[t.status]||t.status):t.status;var pr2=t.priority?(pm[t.priority]||t.priority):t.priority;var ty=t.taskType||t.type;var sL=t.srcLang||"",tL=t.tgtLang||"";if(!sL&&t.langPair){var p=t.langPair.split(/[-–>→]/);if(p.length>=2){sL=p[0].trim();tL=p[1].trim()}}var tg=t.tags;if(Array.isArray(tg))tg=tg.join(", ");
-return mkT({id:t.id||uid(),title:t.title||"",type:ty||"Tradução",client:t.client||"",subClient:t.subClient||"",platform:t.platform||"N/A",status:st||"Por iniciar",priority:pr2||"Normal",srcLang:sL||"EN",tgtLang:tL||"PT",startDate:t.startDate||"",deadline:t.dueDate||t.deadline||"",deadlineTime:t.deadlineTime||"",notes:t.notes||"",links:t.links||"",value:t.value?String(t.value):"",translator:t.translator||"",reviewer:t.reviewer||"",project:t.project||"",progress:t.progress||0,important:t.important||t.starred||false,myDay:t.myDay||false,steps:t.steps||[],tags:tg||"",estimatedHours:t.estimatedHours||"",recurring:t.recurring||"none",createdAt:t.createdAt||new Date().toISOString(),updatedAt:t.updatedAt||new Date().toISOString()})}
-function impJ(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var raw=JSON.parse(ev.target.result);var d=Array.isArray(raw)?raw:(raw.tasks&&Array.isArray(raw.tasks))?raw.tasks:null;if(!d){alert("Formato não reconhecido.");return}var mp=d.map(cvT);var c=confirm("OK=Substituir tudo (equipa)\nCancelar=Juntar às existentes");if(c){db.ref("tasks/team").remove().then(function(){mp.forEach(function(t2){pushTask(t2,"team")});alert("✅ "+mp.length+" importadas!")})}else{mp.forEach(function(t2){pushTask(t2,"team")});alert("✅ "+mp.length+" adicionadas!")}}catch(err){alert("Erro: "+err.message)}};r.readAsText(f);e.target.value=""}
-// CLIENTS
-function openCl(){document.getElementById("clM").style.display="flex";rClM("")}
-function closeCl(){document.getElementById("clM").style.display="none"}
-function rClM(sr){var al=allCl();var fl=sr?al.filter(function(c){return c.toLowerCase().indexOf(sr.toLowerCase())>=0}):al;
-var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="margin:0">👥 Clientes ('+al.length+')</h3><button onclick="closeCl()" style="background:0;border:0;color:var(--sub);cursor:pointer;font-size:18px">✕</button></div>';
-h+='<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"><button onclick="document.getElementById(\'clFI\').click()" style="padding:8px 14px;background:var(--acc);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:12px">📂 Importar</button><button onclick="document.getElementById(\'clPA\').style.display=\'block\'" style="padding:8px 14px;background:var(--input);border:1px solid var(--brd);border-radius:8px;cursor:pointer;font-size:12px">📋 Colar</button><button onclick="expClTxt()" style="padding:8px 14px;background:var(--input);border:1px solid var(--brd);border-radius:8px;cursor:pointer;font-size:12px">💾 Exportar</button><button onclick="if(confirm(\'Limpar importados?\')){cCl=[];saveClients();rClM(\'\')}" style="padding:8px 14px;background:var(--input);border:1px solid var(--brd);border-radius:8px;cursor:pointer;font-size:12px;color:#ef4444">🗑️</button></div>';
-h+='<input type="file" id="clFI" accept=".txt,.csv" onchange="hClF(event)" style="display:none">';
-h+='<div id="clPA" style="display:none;margin-bottom:12px"><textarea id="clPB" rows="5" placeholder="Um por linha..." style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--brd);font-size:12px;box-sizing:border-box"></textarea><button onclick="pstCl()" style="padding:6px 14px;background:var(--acc);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:12px;margin-top:4px">✅ Adicionar</button></div>';
-h+='<input type="text" id="clSr" value="'+esc(sr)+'" oninput="rClM(this.value)" placeholder="🔍 Pesquisar..." style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--brd);font-size:13px;outline:none;margin-bottom:12px;box-sizing:border-box">';
-h+='<div style="max-height:300px;overflow-y:auto;border:1px solid var(--brd);border-radius:10px">';
-var sh=fl.slice(0,200);sh.forEach(function(c,i){h+='<div style="padding:8px 12px;border-bottom:1px solid var(--brd);background:'+(i%2===0?"var(--card)":"var(--alt)")+';font-size:13px">'+esc(c)+'</div>'});
-if(fl.length>200)h+='<div style="padding:12px;text-align:center;color:var(--sub);font-size:12px">... e mais '+(fl.length-200)+'</div>';
-if(!fl.length)h+='<div style="padding:16px;text-align:center;color:var(--sub)">Nenhum</div>';
-h+='</div>';document.getElementById("clMI").innerHTML=h}
-function pstCl(){var b=document.getElementById("clPB");if(!b)return;var ls=b.value.split(/[\n\r]+/).map(function(l){return l.replace(/^[;,\t"]+|[;,\t"]+$/g,"").trim()}).filter(function(l){return l.length>1});var ex={};allCl().forEach(function(c){ex[c.toLowerCase()]=1});var n=0;ls.forEach(function(l){if(!ex[l.toLowerCase()]){cCl.push(l);ex[l.toLowerCase()]=1;n++}});saveClients();rClM("");alert("✅ "+n+" adicionados")}
-function hClF(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var ls=ev.target.result.split(/[\n\r]+/).map(function(l){var p=l.split(/[;\t,]/);return(p[0]||"").replace(/^["']+|["']+$/g,"").trim()}).filter(function(l){return l.length>1&&["cliente","client","name","nome"].indexOf(l.toLowerCase())<0});var ex={};allCl().forEach(function(c){ex[c.toLowerCase()]=1});var n=0;ls.forEach(function(l){if(!ex[l.toLowerCase()]){cCl.push(l);ex[l.toLowerCase()]=1;n++}});saveClients();rClM("");alert("✅ "+n+" importados")};r.readAsText(f);e.target.value=""}
-function expClTxt(){var b=new Blob([allCl().join("\n")],{type:"text/plain"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="delta-lingua-clientes-"+td()+".txt";a.click()}
-// CSV
-function expCSV(){if(!tasks.length){alert("Sem tarefas.");return}var hd=["Título","Tipo","Cliente","Estado","Prioridade","Plataforma","Origem","Destino","Início","Deadline","Hora","Valor €","Horas Est.","Progresso","Tradutor","Revisor","Projeto","Tags","Notas","Criado","Actualizado"];
-var csvEsc=function(v){v=String(v||"").replace(/"/g,'""');return v.indexOf(",")>=0||v.indexOf("\n")>=0||v.indexOf('"')>=0?'"'+v+'"':v};
-var rows=[hd.join(",")];tasks.forEach(function(t){rows.push([t.title,t.type,t.client,t.status,t.priority,t.platform,t.srcLang,t.tgtLang,t.startDate,t.deadline,t.deadlineTime,t.value,t.estimatedHours,(t.progress||0)+"%",t.translator,t.reviewer,t.project,t.tags,(t.notes||"").replace(/[\n\r]+/g," "),t.createdAt?t.createdAt.slice(0,10):"",t.updatedAt?t.updatedAt.slice(0,10):""].map(csvEsc).join(","))});
-var bom="\uFEFF";var bl=new Blob([bom+rows.join("\n")],{type:"text/csv;charset=utf-8"});var a2=document.createElement("a");a2.href=URL.createObjectURL(bl);a2.download="delta-lingua-relatorio-"+td()+".csv";a2.click()}
-// KEYBOARD
-document.addEventListener("keydown",function(e){if(e.ctrlKey&&e.key==="n"){e.preventDefault();addT()}if(e.key==="Escape"&&eId){eId=null;var d=document.getElementById("det");if(d){d.className="";d.innerHTML=""}}if(e.ctrlKey&&e.shiftKey&&e.key==="E"){e.preventDefault();expCSV()}else if(e.ctrlKey&&e.key==="e"){e.preventDefault();expJ()}if(e.ctrlKey&&e.key==="k"){e.preventDefault();go("kanban","")}});
-// RENDER ALL
-function rAll(){rSb();rTi();rFl();rnd()}
-// Auto-close sidebar on mobile
-if(window.innerWidth<=768){document.addEventListener("DOMContentLoaded",function(){var sb=document.getElementById("sb");if(sb&&!sb.classList.contains("c")){sb.classList.add("c");document.querySelectorAll(".lbl,#sbB,.ssc,.srw,.user-info,#sbClose").forEach(function(e){e.style.display="none"})}})}
+
+let cl,ol,al,vw,found,inp,sc,mx,mode,diff,pi,timerInt,timeLeft,uniqueMode;
+
+// ===== SPLASH =====
+function skipSplash() {
+  document.getElementById('splash').style.display='none';
+  document.getElementById('menu').style.display='flex';
+}
+
+// ===== GAME INIT =====
+function startGame(m, d) {
+  mode = m; diff = d; uniqueMode = (m === 'unique');
+  pi = Math.floor(Math.random() * PZ[diff].length);
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('game').style.display = 'flex';
+  document.getElementById('game').classList.add('active');
+  
+  const names = {classic:'Clássico',blitz:'Blitz ⏱️',unique:'Letras Únicas 🎯',zen:'Zen 🧘'};
+  const diffs = {easy:'Fácil',medium:'Médio',hard:'Difícil'};
+  document.getElementById('gmode').textContent = names[mode] || mode;
+  document.getElementById('glevel').textContent = diffs[diff] || diff;
+  
+  // Timer for blitz
+  if (mode === 'blitz') {
+    timeLeft = 120;
+    document.getElementById('timer').style.display = 'block';
+    updateTimer();
+    timerInt = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 0) { clearInterval(timerInt); endBlitz(); }
+    }, 1000);
+  } else {
+    document.getElementById('timer').style.display = 'none';
+    if (timerInt) clearInterval(timerInt);
+  }
+  
+  // Hide score bar in zen
+  document.getElementById('sbar').style.display = mode === 'zen' ? 'none' : 'block';
+  
+  loadPuzzle(pi);
+}
+
+function loadPuzzle(i) {
+  const p = PZ[diff][i];
+  cl = p.c; ol = [...p.o]; al = [cl,...ol];
+  vw = p.w.split('|');
+  
+  // For unique mode, filter words where each letter appears at most once per letter in the set
+  if (uniqueMode) {
+    vw = vw.filter(w => {
+      for (const c of al) {
+        const inWord = (w.match(new RegExp(c,'g'))||[]).length;
+        if (inWord > 1) return false;
+      }
+      return true;
+    });
+  }
+  
+  mx = vw.reduce((s,w) => s + sw(w), 0);
+  found = []; sc = 0; inp = '';
+  document.getElementById('ftotal').textContent = vw.length + ' possíveis';
+  buildHC(); updInp(); updSc(); updFW(); clrMsg();
+}
+
+function updateTimer() {
+  const m = Math.floor(timeLeft/60);
+  const s = String(timeLeft%60).padStart(2,'0');
+  const el = document.getElementById('timer');
+  el.textContent = m+':'+s;
+  el.style.color = timeLeft <= 30 ? '#dc2626' : '#92400e';
+}
+
+function endBlitz() {
+  const pct = mx > 0 ? (sc/mx*100) : 0;
+  let stars = pct >= 50 ? 3 : pct >= 25 ? 2 : pct >= 10 ? 1 : 0;
+  showComplete('Tempo Esgotado!', stars, `Encontraste ${found.length} palavras e fizeste ${sc} pontos!`);
+}
+
+function sw(w) {
+  if (w.length === 4) return 1;
+  let p = w.length;
+  if (al.every(l => w.includes(l))) p += 7;
+  return p;
+}
+function isPG(w) { return al.every(l => w.includes(l)); }
+
+// ===== HONEYCOMB =====
+const HS = '<svg viewBox="0 0 100 110"><polygon class="hb" points="50,2 93,28 93,82 50,108 7,82 7,28"/></svg>';
+function buildHC() {
+  const h = document.getElementById('hc'); h.innerHTML = '';
+  const mk = (t,c) => { const e=document.createElement(t); e.className=c; return e; };
+  const hx = (l,c) => {
+    const d = mk('div','hx'+(c?' ct':''));
+    d.innerHTML = HS+'<span class="hl">'+l.toUpperCase()+'</span>';
+    d.addEventListener('click', () => { d.classList.remove('press'); void d.offsetWidth; d.classList.add('press'); addL(l); });
+    return d;
+  };
+  const r1=mk('div','hr'),r2=mk('div','hr'),r3=mk('div','hr');
+  r1.append(hx(ol[0],0),hx(ol[1],0));
+  r2.append(hx(ol[2],0),hx(cl,1),hx(ol[3],0));
+  r3.append(hx(ol[4],0),hx(ol[5],0));
+  h.append(r1,r2,r3);
+}
+
+// ===== INPUT =====
+function updInp() {
+  const e = document.getElementById('inp');
+  if (!inp) { e.innerHTML='<span class="cur"></span>'; return; }
+  e.innerHTML = [...inp].map(c=>'<span class="'+(c===cl?'cl':'')+'">'+c.toUpperCase()+'</span>').join('')+'<span class="cur"></span>';
+}
+function addL(l) { inp+=l; updInp(); clrMsg(); }
+function del() { inp=inp.slice(0,-1); updInp(); clrMsg(); }
+
+function submit() {
+  const w = inp.toLowerCase();
+  if (w.length < 4) { msg('Mínimo 4 letras','err'); inp=''; updInp(); return; }
+  if (!w.includes(cl)) { msg('Falta a letra central!','err'); inp=''; updInp(); return; }
+  if (![...w].every(c=>al.includes(c))) { msg('Letra não permitida','err'); inp=''; updInp(); return; }
+  if (uniqueMode) {
+    const counts = {};
+    for (const c of w) { counts[c]=(counts[c]||0)+1; if(counts[c]>1){msg('Cada letra só uma vez!','err');inp='';updInp();return;}}
+  }
+  if (!vw.includes(w)) { msg('Não está no dicionário','err'); inp=''; updInp(); return; }
+  if (found.includes(w)) { msg('Já encontrada!','err'); inp=''; updInp(); return; }
+  
+  found.push(w);
+  const pts = sw(w);
+  sc += pts;
+  
+  if (isPG(w)) { msg('🎉 PANGRAMA!','pg'); showToast('PANGRAMA! +'+pts); spawnConfetti(); }
+  else if (w.length >= 7) { msg('Incrível! +'+pts,'ok'); showToast('+'+pts); }
+  else if (w.length >= 5) { msg('Boa! +'+pts,'ok'); }
+  else msg('+'+pts,'ok');
+  
+  inp=''; updInp(); updSc(); updFW();
+  
+  // Check completion
+  if (mode !== 'blitz' && mode !== 'zen') {
+    const pct = mx>0?(sc/mx*100):0;
+    if (pct >= 25 && found.length >= vw.length * 0.3) {
+      setTimeout(() => {
+        const stars = pct>=90?3:pct>=70?2:1;
+        showComplete('Nível Completo!', stars, `${found.length}/${vw.length} palavras · ${sc} pontos`);
+      }, 600);
+    }
+  }
+}
+
+// ===== SCORE =====
+function updSc() {
+  if (mode === 'zen') return;
+  const pct = mx>0?(sc/mx*100):0;
+  document.getElementById('plbl').textContent = sc+' pts';
+  document.getElementById('pfill').style.width = Math.min(pct,100)+'%';
+  let rk = RANKS[0];
+  for (const r of RANKS) if (pct>=r.p) rk=r;
+  document.getElementById('rlbl').textContent = rk.n;
+}
+
+// ===== FOUND WORDS =====
+function updFW() {
+  document.getElementById('fc').textContent = found.length;
+  const c = document.getElementById('fw'); c.innerHTML = '';
+  const sorted = [...found].sort((a,b) => {
+    if (isPG(a)&&!isPG(b)) return -1;
+    if (!isPG(a)&&isPG(b)) return 1;
+    return a.localeCompare(b,'pt');
+  });
+  sorted.forEach(w => {
+    const s = document.createElement('span');
+    s.className = 'fd'+(isPG(w)?' pg':'');
+    s.textContent = w; c.appendChild(s);
+  });
+  // Auto scroll to bottom
+  c.scrollTop = c.scrollHeight;
+}
+
+function shuf() {
+  for (let i=ol.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[ol[i],ol[j]]=[ol[j],ol[i]];}
+  al=[cl,...ol]; buildHC();
+}
+
+// ===== EFFECTS =====
+let mt;
+function msg(t,c){const e=document.getElementById('msg');e.textContent=t;e.className=c||'';clearTimeout(mt);mt=setTimeout(()=>{e.innerHTML='&nbsp;';e.className='';},2200);}
+function clrMsg(){document.getElementById('msg').innerHTML='&nbsp;';document.getElementById('msg').className='';}
+
+function showToast(text) {
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = text;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 900);
+}
+
+function spawnConfetti() {
+  const colors = ['#f59e0b','#dc2626','#16a34a','#3b82f6','#a855f7','#ec4899'];
+  for (let i=0;i<30;i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.cssText = `left:${Math.random()*100}%;background:${colors[i%colors.length]};border-radius:${Math.random()>.5?'50%':'2px'};width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+function showComplete(title, stars, message) {
+  document.getElementById('cTitle').textContent = title;
+  document.getElementById('cStars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3-stars);
+  document.getElementById('cMsg').textContent = message;
+  document.getElementById('complete').classList.add('show');
+  if (stars >= 2) spawnConfetti();
+}
+
+function nextPuzzle() {
+  document.getElementById('complete').classList.remove('show');
+  pi = (pi+1) % PZ[diff].length;
+  loadPuzzle(pi);
+}
+
+function backToMenu() {
+  if (timerInt) clearInterval(timerInt);
+  document.getElementById('game').style.display = 'none';
+  document.getElementById('game').classList.remove('active');
+  document.getElementById('complete').classList.remove('show');
+  document.getElementById('menu').style.display = 'flex';
+}
+
+function novasLetras() {
+  if (timerInt) clearInterval(timerInt);
+  pi = (pi+1) % PZ[diff].length;
+  loadPuzzle(pi);
+  msg('Novas letras!','ok');
+  if (mode === 'blitz') {
+    timeLeft = 120;
+    updateTimer();
+    timerInt = setInterval(() => {
+      timeLeft--;
+      updateTimer();
+      if (timeLeft <= 0) { clearInterval(timerInt); endBlitz(); }
+    }, 1000);
+  }
+}
+
+function desistir() {
+  if (timerInt) clearInterval(timerInt);
+  // Separate found vs missed
+  const missed = vw.filter(w => !found.includes(w)).sort((a,b) => a.localeCompare(b,'pt'));
+  const pct = mx>0?(sc/mx*100):0;
+  const stars = pct>=50?3:pct>=25?2:pct>=10?1:0;
+  
+  // Build solution text
+  let txt = `✅ Encontraste ${found.length} de ${vw.length} palavras (${sc} pts)\n\n`;
+  
+  if (found.length > 0) {
+    txt += '🟢 As tuas: ' + found.sort((a,b)=>a.localeCompare(b,'pt')).join(', ') + '\n\n';
+  }
+  
+  txt += `🔴 Faltavam (${missed.length}):\n`;
+  // Group by first letter
+  const groups = {};
+  missed.forEach(w => {
+    const l = w[0].toUpperCase();
+    if (!groups[l]) groups[l] = [];
+    groups[l].push(w);
+  });
+  Object.keys(groups).sort().forEach(l => {
+    txt += l + ': ' + groups[l].join(', ') + '\n';
+  });
+  
+  // Mark pangrams
+  const pgs = vw.filter(w => isPG(w));
+  if (pgs.length > 0) {
+    txt += '\n⭐ Pangramas: ' + pgs.join(', ');
+  }
+  
+  showComplete('💡 Solução', stars, txt);
+}
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('game').classList.contains('active')) return;
+  if (e.key==='Enter'){submit();return;}
+  if (e.key==='Backspace'){del();e.preventDefault();return;}
+  const k=e.key.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  if(k.length===1&&/[a-z]/.test(k)){
+    if(al.includes(k)) addL(k);
+    else msg('Letra não disponível','err');
+  }
+});
+
+// ===== TOUCH / SWIPE on INPUT to delete =====
+let tx0;
+document.getElementById('inp').addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;},{passive:true});
+document.getElementById('inp').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx0;
+  if(dx<-40) del();
+});
 </script>
 </body>
 </html>
